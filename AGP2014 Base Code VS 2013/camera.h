@@ -15,7 +15,7 @@ public:
 	~Camera();
 	void initialise();
 	void render(std::stack<glm::mat4>& _Stack);
-	void update(glm::vec3 _targetPos);
+	void update(glm::vec3 _targetPos, float _rotate);
 
 
 private:

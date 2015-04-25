@@ -21,6 +21,7 @@ public:
 	void render(std::stack<glm::mat4>& _stack);
 	void update(void);
 	glm::vec3 getPos() { return pos; }
+	float getRotate() { return rotate; }
 
 private:
 	// md2 stuff
@@ -39,6 +40,8 @@ private:
 
 	glm::vec3 pos;
 	//GLfloat Zpos;
+
+	float rotate;
 };
 
 

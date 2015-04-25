@@ -1,6 +1,9 @@
 #include "hobgoblin.h"
 #include <SDL_ttf.h>
+#include "Utils.h"
 using namespace std;
+
+
 
 //constructor
 Hobgoblin::Hobgoblin()
@@ -33,6 +36,7 @@ void Hobgoblin::initialise()
 	pos.x = 1.0f;
 	pos.y = 1.2f;
 	pos.z = -5.0f;
+	rotate = 0;
 }
 
 void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
@@ -50,7 +54,7 @@ void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
 	rt3d::setMaterial(shaderProgram, tmpMaterial);
 	_Stack.push(_Stack.top());
 	_Stack.top() = glm::translate(_Stack.top(), pos);
-	_Stack.top() = glm::rotate(_Stack.top(), 90.0f, glm::vec3(0.0f, -1.0f, 0.0f));
+	_Stack.top() = glm::rotate(_Stack.top(), rotate + 90.f, glm::vec3(0.0f, -1.0f, 0.0f));
 	_Stack.top() = glm::rotate(_Stack.top(), 90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
 	
 	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(scale*0.05, scale*0.05, scale*0.05));
@@ -60,6 +64,7 @@ void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
 	glCullFace(GL_BACK);
 }
 
+
 void Hobgoblin::update(void)
 {
 	currentAnim = 0;
@@ -68,25 +73,43 @@ void Hobgoblin::update(void)
 
 	if (keys[SDL_SCANCODE_W]){
 		//eye = moveForward(eye, r, 0.1f);
-		pos.z += 0.1f;
+		//pos.z += 0.1f;
+		pos = Utils::moveForward(pos, rotate, -0.1f);
 		currentAnim = 1;
 
 	}
 	if (keys[SDL_SCANCODE_S]) //eye = moveForward(eye, r, -0.1f);
 	{
-		pos.z -= 0.1f;
+		//pos.z -= 0.1f;
+		pos = Utils::moveForward(pos, rotate, 0.1f);
 		currentAnim = 1;
 	}
+
 	if (keys[SDL_SCANCODE_A]) //eye = moveRight(eye, r, -0.1f);
 	{
-		pos.x += 0.1f;
-		currentAnim = 1;
+		rotate -= 0.4;
 	}
+
 	if (keys[SDL_SCANCODE_D]) //eye = moveRight(eye, r, 0.1f);
 	{
-		pos.x -= 0.1f;
-		currentAnim = 1;
+		rotate += 0.4;
 	}
+
+	//strafe left
+	if (keys[SDL_SCANCODE_Q])
+	{
+		currentAnim = 1;
+		pos = Utils::moveRight(pos, rotate, 0.1f);
+	}
+
+	//strafe right
+	if (keys[SDL_SCANCODE_E])
+	{
+		currentAnim = 1;
+		pos = Utils::moveRight(pos, rotate, -0.1f);
+	}
+
+
 	if (keys[SDL_SCANCODE_Z]) {
 		if (--currentAnim < 0) currentAnim = 19;
 		cout << "Current animation: " << currentAnim << endl;

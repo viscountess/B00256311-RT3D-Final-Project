@@ -1,5 +1,5 @@
 #include "camera.h"
-
+#include "Utils.h"
 //constructor
 Camera::Camera()
 {
@@ -11,6 +11,8 @@ Camera::~Camera()
 {
 
 }
+
+
 
 //initialise the camera
 void Camera::initialise()
@@ -29,9 +31,9 @@ void Camera::render(std::stack<glm::mat4>& _Stack)
 
 //Passing in the hobgoblin position (_targetPos) so that
 //the camera position can be updated
-void Camera::update(glm::vec3 _targetPos)
+void Camera::update(glm::vec3 _targetPos, float _rotate)
 {
-	eye = _targetPos - glm::vec3(0.0, -2, 5);
+	eye = Utils::moveForward(_targetPos, _rotate, 5);
 	at = _targetPos;
 
 }
