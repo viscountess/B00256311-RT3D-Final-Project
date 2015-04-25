@@ -15,7 +15,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
 #include "md2model.h"
-
+#include "skybox.h"
+#include "hobgoblin.h"
 #include <SDL_ttf.h>
 
 using namespace std;
@@ -30,7 +31,8 @@ GLuint md2VertCount = 0;
 GLuint meshObjects[2];
 
 GLuint shaderProgram;
-GLuint skyboxProgram;
+
+Skybox *mySkybox;
 
 GLfloat r = 0.0f;
 
@@ -42,7 +44,7 @@ stack<glm::mat4> mvStack;
 
 // TEXTURE STUFF
 GLuint textures[2];
-GLuint skybox[5];
+
 GLuint labels[5];
 
 rt3d::lightStruct light0 = {
@@ -139,8 +141,8 @@ SDL_Window * setupRC(SDL_GLContext &context) {
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // Turn on x4 multisampling anti-aliasing (MSAA)
  
     // Create 800x600 window
-    window = SDL_CreateWindow("SDL/GLM/OpenGL Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow("B00256311 3D Tech Demo - Final Project", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        1000, 800, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
 	if (!window) // Check window was created OK
         rt3d::exitFatalError("Unable to create window");
  
@@ -149,45 +151,7 @@ SDL_Window * setupRC(SDL_GLContext &context) {
 	return window;
 }
 
-// A simple texture loading function
-// lots of room for improvement - and better error checking!
-GLuint loadBitmap(char *fname) {
-	GLuint texID;
-	glGenTextures(1, &texID); // generate texture ID
 
-	// load file - using core SDL library
- 	SDL_Surface *tmpSurface;
-	tmpSurface = SDL_LoadBMP(fname);
-	if (!tmpSurface) {
-		std::cout << "Error loading bitmap" << std::endl;
-	}
-
-	// bind texture and set parameters
-	glBindTexture(GL_TEXTURE_2D, texID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	SDL_PixelFormat *format = tmpSurface->format;
-	
-	GLuint externalFormat, internalFormat;
-	if (format->Amask) {
-		internalFormat = GL_RGBA;
-		externalFormat = (format->Rmask < format-> Bmask) ? GL_RGBA : GL_BGRA;
-	}
-	else {
-		internalFormat = GL_RGB;
-		externalFormat = (format->Rmask < format-> Bmask) ? GL_RGB : GL_BGR;
-	}
-
-	glTexImage2D(GL_TEXTURE_2D,0,internalFormat,tmpSurface->w, tmpSurface->h, 0,
-		externalFormat, GL_UNSIGNED_BYTE, tmpSurface->pixels);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	SDL_FreeSurface(tmpSurface); // texture loaded, free the temporary buffer
-	return texID;	// return value of texture ID
-}
 
 
 void init(void) {
@@ -196,7 +160,7 @@ void init(void) {
 	rt3d::setLight(shaderProgram, light0);
 	rt3d::setMaterial(shaderProgram, material0);
 
-	skyboxProgram = rt3d::initShaders("textured.vert","textured.frag");
+	
 
 	vector<GLfloat> verts;
 	vector<GLfloat> norms;
@@ -205,20 +169,16 @@ void init(void) {
 	rt3d::loadObj("cube.obj", verts, norms, tex_coords, indices);
 	GLuint size = indices.size();
 	meshIndexCount = size;
-	textures[0] = loadBitmap("fabric.bmp");
+	textures[0] = rt3d::loadBitmap("fabric.bmp");
 	meshObjects[0] = rt3d::createMesh(verts.size()/3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 
-	textures[1] = loadBitmap("hobgoblin2.bmp");
+	textures[1] = rt3d::loadBitmap("hobgoblin2.bmp");
 	meshObjects[1] = tmpModel.ReadMD2Model("tris.MD2");
 	md2VertCount = tmpModel.getVertDataCount();
 
 	
-	
-	skybox[0] = loadBitmap("Town-skybox/Town_ft.bmp");
-	skybox[1] = loadBitmap("Town-skybox/Town_bk.bmp");
-	skybox[2] = loadBitmap("Town-skybox/Town_lf.bmp");
-	skybox[3] = loadBitmap("Town-skybox/Town_rt.bmp");
-	//skybox[4] = loadBitmap("Town-skybox/Town_up.bmp");
+	mySkybox = new Skybox();
+	mySkybox->initialise();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -297,52 +257,8 @@ void draw(SDL_Window * window) {
 	mvStack.top() = glm::lookAt(eye, at, up);
 
 
-	// draw a skybox
-	glUseProgram(skyboxProgram);
-	rt3d::setUniformMatrix4fv(skyboxProgram, "projection", glm::value_ptr(projection));
-
-	glDepthMask(GL_FALSE); // make sure depth test is off
-	glm::mat3 mvRotOnlyMat3 = glm::mat3(mvStack.top());
-	mvStack.push(glm::mat4(mvRotOnlyMat3));
-
-	// front
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[0]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, -2.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-	// back
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[1]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(0.0f, 0.0f, 2.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-	// left
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[2]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-2.0f, 0.0f, 0.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-	// right
-	mvStack.push(mvStack.top());
-	glBindTexture(GL_TEXTURE_2D, skybox[3]);
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(2.0f, 0.0f, 0.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
-
-
-	mvStack.pop();
+	// draw skybox here
+	mySkybox->render(mvStack, projection);
 
 	// back to remainder of rendering
 	glDepthMask(GL_TRUE); // make sure depth test is on
@@ -396,7 +312,7 @@ void draw(SDL_Window * window) {
 
 
 
-	////////////////////////////////////////////////////////////////////
+	/*////////////////////////////////////////////////////////////////////
 	//This renders a 3D label
 	////////////////////////////////////////////////////////////////////
 
@@ -432,7 +348,7 @@ void draw(SDL_Window * window) {
 
 
 	// remember to use at least one pop operation per push...
-	mvStack.pop(); // initial matrix
+	mvStack.pop(); // initial matrix*/
 	glDepthMask(GL_TRUE);
 	
 	SDL_GL_SwapWindow(window); // swap buffers
