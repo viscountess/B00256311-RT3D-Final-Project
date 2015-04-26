@@ -16,6 +16,7 @@ Skybox::~Skybox() //deconstructor
 
 }
 
+//This function 
 void Skybox::initialise()
 {
 	skyboxProgram = rt3d::initShaders("textured.vert", "textured.frag");
