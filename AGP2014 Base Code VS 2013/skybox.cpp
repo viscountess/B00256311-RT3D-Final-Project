@@ -16,15 +16,14 @@ Skybox::~Skybox() //deconstructor
 
 }
 
-//This function 
 void Skybox::initialise()
 {
 	skyboxProgram = rt3d::initShaders("textured.vert", "textured.frag");
 
-	skybox[0] = rt3d::loadBitmap("Town-skybox/Town_ft.bmp");
-	skybox[1] = rt3d::loadBitmap("Town-skybox/Town_bk.bmp");
-	skybox[2] = rt3d::loadBitmap("Town-skybox/Town_lf.bmp");
-	skybox[3] = rt3d::loadBitmap("Town-skybox/Town_rt.bmp");
+	skybox[0] = rt3d::loadBitmap("Town-skybox/skybox_hell_front.bmp");
+	skybox[1] = rt3d::loadBitmap("Town-skybox/skybox_hell_back.bmp");
+	skybox[2] = rt3d::loadBitmap("Town-skybox/skybox_hell_left.bmp");
+	skybox[3] = rt3d::loadBitmap("Town-skybox/skybox_hell_right.bmp");
 	//skybox[4] = loadBitmap("Town-skybox/Town_up.bmp");
 
 	vector<GLfloat> verts;
