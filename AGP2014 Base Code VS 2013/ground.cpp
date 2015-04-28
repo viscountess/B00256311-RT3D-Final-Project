@@ -41,11 +41,22 @@ void Ground::initialise()
 //This function renders the ground cube
 void Ground::render(std::stack<glm::mat4>& _Stack)
 {
-	// draw a cube for ground plane
+	// draw a cube for main ground plane
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	_Stack.push(_Stack.top());
-	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(-10.0f, -0.1f, -10.0f));
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(20.0f, -0.1f, -60.0f));
 	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(20.0f, 0.1f, 20.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(_Stack.top()));
+	rt3d::setMaterial(shaderProgram, material0);
+	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	_Stack.pop();
+
+
+	//Creating the first static ground
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	_Stack.push(_Stack.top());
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(20.0f, -0.1f, 0.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(10.0f, 0.1f, 10.0f));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(_Stack.top()));
 	rt3d::setMaterial(shaderProgram, material0);
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
