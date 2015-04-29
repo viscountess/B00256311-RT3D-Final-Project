@@ -42,6 +42,7 @@ namespace rt3d {
 		const GLfloat* texcoords);
 	GLuint createMesh(const GLuint numVerts, const GLfloat* vertices);
 	GLuint createColourMesh(const GLuint numVerts, const GLfloat* vertices, const GLfloat* colours);
+	GLuint loadBitmap(char *fname);
 
 	void setUniformMatrix4fv(const GLuint program, const char* uniformName, const GLfloat *data);
 	void setMatrices(const GLuint program, const GLfloat *proj, const GLfloat *mv, const GLfloat *mvp);

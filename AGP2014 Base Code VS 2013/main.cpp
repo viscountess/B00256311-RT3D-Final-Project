@@ -14,14 +14,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
-#include "md2model.h"
 #include "skybox.h"
 #include "hobgoblin.h"
+#include "camera.h"
+#include "ground.h"
+#include "lavaground.h"
+#include "movingPlatform.h"
+#include "largeRock.h"
 #include <SDL_ttf.h>
 
 using namespace std;
 
-#define DEG_TO_RADIAN 0.017453293
+
 
 // Globals
 // Real programs don't use globals :-D
@@ -34,11 +38,25 @@ GLuint shaderProgram;
 
 Skybox *mySkybox;
 
-GLfloat r = 0.0f;
+Hobgoblin *myHobgoblin;
 
-glm::vec3 eye(0.0f, 1.0f, 0.0f);
-glm::vec3 at(0.0f, 1.0f, -1.0f);
-glm::vec3 up(0.0f, 1.0f, 0.0f);
+Camera *myCamera;
+
+Ground *myGround;
+LavaGround *lavapool;
+//Array of moving platforms
+//number of moving platforms stored under one variable
+//so I can just change the number in one place
+const int numOfmPlatforms = 6;
+MovingPlatform *mPlatform[numOfmPlatforms];
+
+//Pointer for an array of large rocks that will be displayed around the level
+//-these will form a wall around the platforms
+//One rock for now to ensure I can load the rock correctly
+//with texture and collision working
+LargeRock *lrgRock[1];
+
+GLfloat r = 0.0f;
 
 stack<glm::mat4> mvStack; 
 
@@ -53,6 +71,7 @@ rt3d::lightStruct light0 = {
 	{1.0f, 1.0f, 1.0f, 1.0f}, // specular
 	{-10.0f, 10.0f, 10.0f, 1.0f}  // position
 };
+
 glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
 
 rt3d::materialStruct material0 = {
@@ -67,10 +86,6 @@ rt3d::materialStruct material1 = {
 	{0.8f, 0.8f, 0.8f, 1.0f}, // specular
 	1.0f  // shininess
 };
-
-// md2 stuff
-md2model tmpModel;
-int currentAnim = 0;
 
 TTF_Font * textFont;
 
@@ -159,26 +174,43 @@ void init(void) {
 	shaderProgram = rt3d::initShaders("phong-tex.vert","phong-tex.frag");
 	rt3d::setLight(shaderProgram, light0);
 	rt3d::setMaterial(shaderProgram, material0);
-
-	
-
-	vector<GLfloat> verts;
-	vector<GLfloat> norms;
-	vector<GLfloat> tex_coords;
-	vector<GLuint> indices;
-	rt3d::loadObj("cube.obj", verts, norms, tex_coords, indices);
-	GLuint size = indices.size();
-	meshIndexCount = size;
-	textures[0] = rt3d::loadBitmap("fabric.bmp");
-	meshObjects[0] = rt3d::createMesh(verts.size()/3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
-
-	textures[1] = rt3d::loadBitmap("hobgoblin2.bmp");
-	meshObjects[1] = tmpModel.ReadMD2Model("tris.MD2");
-	md2VertCount = tmpModel.getVertDataCount();
-
 	
 	mySkybox = new Skybox();
 	mySkybox->initialise();
+
+	myGround = new Ground();
+	myGround->initialise();
+
+	lavapool = new LavaGround();
+	lavapool->initialise();
+
+	//Starting and end co-ordinates of moving platforms
+	mPlatform[0] = new MovingPlatform(glm::vec3(20,-0.1,-35), glm::vec3(20, -0.1, -15));
+	mPlatform[1] = new MovingPlatform(glm::vec3(-40, -0.1, -16), glm::vec3(5, -0.1, -10));
+	mPlatform[2] = new MovingPlatform(glm::vec3(-50, -0.1, -20), glm::vec3(-50, -0.1, -65));
+	mPlatform[3] = new MovingPlatform(glm::vec3(8, -0.1, 15), glm::vec3(-60, -0.1, 50));
+	mPlatform[4] = new MovingPlatform(glm::vec3(-35, -0.1, 55), glm::vec3(32, -0.1, 15));
+	mPlatform[5] = new MovingPlatform(glm::vec3(-35, -0.1, 70), glm::vec3(15, -0.1, 78));
+	
+	//Moving Platforms initialised
+	for (int i = 0; i < numOfmPlatforms; i++)
+	{
+		
+		mPlatform[i]->initialise();
+	}
+
+	//Large Rocks initialised
+	for (int j = 0; j < 1; j++)
+	{
+		lrgRock[j] = new LargeRock();
+		lrgRock[j]->initialise();
+	}
+
+	myHobgoblin = new Hobgoblin();
+	myHobgoblin->initialise();
+
+	myCamera = new Camera();
+	myCamera->initialise();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -198,25 +230,17 @@ void init(void) {
 
 }
 
-glm::vec3 moveForward(glm::vec3 pos, GLfloat angle, GLfloat d) {
-	return glm::vec3(pos.x + d*std::sin(r*DEG_TO_RADIAN), pos.y, pos.z - d*std::cos(r*DEG_TO_RADIAN));
-}
-
-glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
-	return glm::vec3(pos.x + d*std::cos(r*DEG_TO_RADIAN), pos.y, pos.z + d*std::sin(r*DEG_TO_RADIAN));
-}
-
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if ( keys[SDL_SCANCODE_W] ) eye = moveForward(eye,r,0.1f);
-	if ( keys[SDL_SCANCODE_S] ) eye = moveForward(eye,r,-0.1f);
-	if ( keys[SDL_SCANCODE_A] ) eye = moveRight(eye,r,-0.1f);
-	if ( keys[SDL_SCANCODE_D] ) eye = moveRight(eye,r,0.1f);
-	if ( keys[SDL_SCANCODE_R] ) eye.y += 0.1;
-	if ( keys[SDL_SCANCODE_F] ) eye.y -= 0.1;
+	//if ( keys[SDL_SCANCODE_W] ) eye = moveForward(eye,r,0.1f);
+	//if ( keys[SDL_SCANCODE_S] ) eye = moveForward(eye,r,-0.1f);
+	//if ( keys[SDL_SCANCODE_A] ) eye = moveRight(eye,r,-0.1f);
+	//if ( keys[SDL_SCANCODE_D] ) eye = moveRight(eye,r,0.1f);
+	//if ( keys[SDL_SCANCODE_R] ) eye.y += 0.1;
+	//if ( keys[SDL_SCANCODE_F] ) eye.y -= 0.1;
 
-	if ( keys[SDL_SCANCODE_COMMA] ) r -= 1.0f;
-	if ( keys[SDL_SCANCODE_PERIOD] ) r += 1.0f;
+	//if ( keys[SDL_SCANCODE_COMMA] ) r -= 1.0f;
+	//if ( keys[SDL_SCANCODE_PERIOD] ) r += 1.0f;
 
 	if ( keys[SDL_SCANCODE_1] ) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -226,14 +250,24 @@ void update(void) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glEnable(GL_CULL_FACE);
 	}
-	if ( keys[SDL_SCANCODE_Z] ) {
+
+	for (int i = 0; i < numOfmPlatforms; i++)
+	{
+		mPlatform[i]->update();
+	}
+
+	myHobgoblin->update();
+	/*if ( keys[SDL_SCANCODE_Z] ) {
 		if (--currentAnim < 0) currentAnim = 19;
 		cout << "Current animation: " << currentAnim << endl;
 	}
 	if ( keys[SDL_SCANCODE_X] ) {
 		if (++currentAnim >= 20) currentAnim = 0;
 		cout << "Current animation: " << currentAnim << endl;
-	}
+	}*/
+	myCamera->update(myHobgoblin->getPos(), myHobgoblin->getRotate());
+
+	
 }
 
 
@@ -253,9 +287,8 @@ void draw(SDL_Window * window) {
 	glm::mat4 modelview(1.0); // set base position for scene
 	mvStack.push(modelview);
 
-	at = moveForward(eye, r, 1.0f);
-	mvStack.top() = glm::lookAt(eye, at, up);
-
+	//draw the camera
+	myCamera->render(mvStack);
 
 	// draw skybox here
 	mySkybox->render(mvStack, projection);
@@ -274,42 +307,28 @@ void draw(SDL_Window * window) {
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
+	//draw the ground cube here
+	myGround->render(mvStack);
 
+	//draw large lavapool here
+	lavapool->render(mvStack);
 
-	// draw a cube for ground plane
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-10.0f, -0.1f, -10.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(20.0f, 0.1f, 20.0f));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::setMaterial(shaderProgram, material0);
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
+	//drawing moving platforms here
+	for (int i = 0; i < numOfmPlatforms; i++)
+	{
+		mPlatform[i]->render(mvStack);
+	}
 
+	//drawing large rocks here
+	for (int j = 0; j < 1; j++)
+	{
+		lrgRock[j]->render(mvStack);
+	}
 
+	//draw the hobgoblin
+	myHobgoblin->render(mvStack);
 
-
-
-
-	// Animate the md2 model, and update the mesh with new vertex data
-	tmpModel.Animate(currentAnim, 0.1);
-	rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
-
-	// draw the hobgoblin
-	glCullFace(GL_FRONT); // md2 faces are defined clockwise, so cull front face
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	rt3d::materialStruct tmpMaterial = material1;
-	rt3d::setMaterial(shaderProgram, tmpMaterial);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(1.0f, 1.2f, -5.0f));
-	mvStack.top() = glm::rotate(mvStack.top(), 90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(scale*0.05, scale*0.05, scale*0.05));
-	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawMesh(meshObjects[1], md2VertCount, GL_TRIANGLES);
-	mvStack.pop();
-	glCullFace(GL_BACK);
-
-
+	
 
 
 	/*////////////////////////////////////////////////////////////////////

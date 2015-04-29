@@ -33,9 +33,9 @@ void Hobgoblin::initialise()
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
 	//rt3d::setLight(shaderProgram, light0);
 
-	pos.x = 1.0f;
+	pos.x = 20.0f;
 	pos.y = 1.2f;
-	pos.z = -5.0f;
+	pos.z = -60.0f;
 	rotate = 0;
 }
 
@@ -85,30 +85,33 @@ void Hobgoblin::update(void)
 		currentAnim = 1;
 	}
 
-	if (keys[SDL_SCANCODE_A]) //eye = moveRight(eye, r, -0.1f);
-	{
-		rotate -= 0.4;
-	}
-
-	if (keys[SDL_SCANCODE_D]) //eye = moveRight(eye, r, 0.1f);
-	{
-		rotate += 0.4;
-	}
-
 	//strafe left
-	if (keys[SDL_SCANCODE_Q])
+	if (keys[SDL_SCANCODE_A])
 	{
 		currentAnim = 1;
 		pos = Utils::moveRight(pos, rotate, 0.1f);
 	}
 
 	//strafe right
-	if (keys[SDL_SCANCODE_E])
+	if (keys[SDL_SCANCODE_D])
 	{
 		currentAnim = 1;
 		pos = Utils::moveRight(pos, rotate, -0.1f);
 	}
 
+	//look left
+	if (keys[SDL_SCANCODE_Q]) //eye = moveRight(eye, r, -0.1f);
+	{
+		rotate -= 0.4;
+	}
+
+	//look right
+	if (keys[SDL_SCANCODE_E]) //eye = moveRight(eye, r, 0.1f);
+	{
+		rotate += 0.4;
+	}
+
+	
 
 	if (keys[SDL_SCANCODE_Z]) {
 		if (--currentAnim < 0) currentAnim = 19;
