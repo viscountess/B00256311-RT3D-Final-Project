@@ -18,7 +18,7 @@ LavaGround::~LavaGround()
 void LavaGround::initialise()
 {
 	material0 = {
-		{ 1.0f, 1.0f, 0.0f, 0.8f }, // ambient
+		{ 1.0f, 1.0f, 0.0f, 1.0f }, // ambient
 		{ 0.2f, 0.2f, 0.2f, 1.0f }, // diffuse
 		{ 0.2f, 0.1f, 0.2f, 1.0f }, // specular
 		2.0f  // shininess

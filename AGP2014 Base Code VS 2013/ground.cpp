@@ -61,4 +61,34 @@ void Ground::render(std::stack<glm::mat4>& _Stack)
 	rt3d::setMaterial(shaderProgram, material0);
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	_Stack.pop();
+
+	//Creating the second static ground
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	_Stack.push(_Stack.top());
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(-40.0f, -0.1f, -80.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(10.0f, 0.1f, 10.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(_Stack.top()));
+	rt3d::setMaterial(shaderProgram, material0);
+	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	_Stack.pop();
+
+	//Creating the third static ground
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	_Stack.push(_Stack.top());
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(-50.0f, -0.1f, 65.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(10.0f, 0.1f, 10.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(_Stack.top()));
+	rt3d::setMaterial(shaderProgram, material0);
+	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	_Stack.pop();
+
+	//Creating the fourth static ground
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	_Stack.push(_Stack.top());
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(30.0f, -0.1f, 70.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(10.0f, 0.1f, 10.0f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(_Stack.top()));
+	rt3d::setMaterial(shaderProgram, material0);
+	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	_Stack.pop();
 }
