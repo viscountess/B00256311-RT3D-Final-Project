@@ -34,6 +34,7 @@ void Camera::render(std::stack<glm::mat4>& _Stack)
 void Camera::update(glm::vec3 _targetPos, float _rotate)
 {
 	eye = Utils::moveForward(_targetPos, _rotate, 5);
+	eye.y += 2;
 	at = _targetPos;
 
 }

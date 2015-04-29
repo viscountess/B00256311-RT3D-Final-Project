@@ -43,5 +43,6 @@ private:
 	//direction of travel
 	int m_direction;
 
+	float waitTime;
 };
 #endif //MOVING_PLATFORM_INCLUDE

@@ -30,6 +30,8 @@ void MovingPlatform::initialise()
 		2.0f  // shininess
 	};
 
+	waitTime = 0;
+
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
 	rt3d::setMaterial(shaderProgram, material0);
 
@@ -59,7 +61,59 @@ void MovingPlatform::render(std::stack<glm::mat4>& _Stack)
 	_Stack.pop();
 }
 
+//finds the dot product
+float dot(glm::vec3 A, glm::vec3 B)
+{
+	return (A.x * B.x) + (A.y * B.y) + (A.z * B.z);
+}
+
+//returns the length of the vector
+//Doing it this way as there is no length function in the glm class
+float length(glm::vec3 vec)
+{
+	return sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
+}
+
 void MovingPlatform::update()
 {
+	waitTime -= 0.1;
+	if (waitTime > 0)
+		return;
+	glm::vec3 to;
+	glm::vec3 from;
+
+	if (m_direction == 1)
+	{
+		to = endPos;
+		from = startingPos;
+	}
+	else
+	{
+		to = startingPos;
+		from = endPos;
+	}
+
+	//stores the direction to target position
+	glm::vec3 dir = to - from;
+	//stores the distance between startingPos and endPos
+	float distance = length(dir);
+
+	//normalises the vector to make it a unit vector
+	dir /= distance;
+
+	glm::vec3 offset = dir;
+	offset *= 0.1; //speed
+	currentPos += offset;
+	
+	glm::vec3 dirToTarget = to - currentPos;
+	dirToTarget /= length(dirToTarget);
+
+	float dp = dot(dir, dirToTarget);
+	if ( dp < 0)
+	{
+		currentPos = to;
+		m_direction *= -1;
+		waitTime = 20; //waiting time before the platform moves
+	}
 
 }
