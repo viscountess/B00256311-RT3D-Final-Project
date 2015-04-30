@@ -54,7 +54,7 @@ MovingPlatform *mPlatform[numOfmPlatforms];
 //Array of Golden Bunny collectables
 //Also including a const variable to store number of bunnies
 //so that it can be changed in one place
-const int numOfgBunnies = 1;
+const int numOfgBunnies = 8;
 BunnyPickup *gBunnies[numOfgBunnies];
 
 //Pointer for an array of large rocks that will be displayed around the level
@@ -215,6 +215,13 @@ void init(void) {
 
 	//Positions of Golden Bunnies
 	gBunnies[0] = new BunnyPickup(glm::vec3(30.0f, -0.1f, -50.0f));
+	gBunnies[1] = new BunnyPickup(glm::vec3(-45, -0.1, -80));
+	gBunnies[2] = new BunnyPickup(glm::vec3(-38, -0.1, -72));
+	gBunnies[3] = new BunnyPickup(glm::vec3(-36, -0.1, -82));
+	gBunnies[4] = new BunnyPickup(glm::vec3(22, -0.1, 5));
+	gBunnies[5] = new BunnyPickup(glm::vec3(18, -0.1, -3));
+	gBunnies[6] = new BunnyPickup(glm::vec3(-50.0f, -0.1f, 65.0f));
+	gBunnies[7] = new BunnyPickup(glm::vec3(30.0f, -0.1f, 70.0f));
 
 	//Golden bunny pickup initialised
 	for (int k = 0; k < numOfgBunnies; k++)
