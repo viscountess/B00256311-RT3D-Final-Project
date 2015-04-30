@@ -1,5 +1,6 @@
 #include "movingPlatform.h"
 #include <time.h>
+#include "Utils.h"
 
 using namespace std;
 
@@ -61,18 +62,7 @@ void MovingPlatform::render(std::stack<glm::mat4>& _Stack)
 	_Stack.pop();
 }
 
-//finds the dot product
-float dot(glm::vec3 A, glm::vec3 B)
-{
-	return (A.x * B.x) + (A.y * B.y) + (A.z * B.z);
-}
 
-//returns the length of the vector
-//Doing it this way as there is no length function in the glm class
-float length(glm::vec3 vec)
-{
-	return sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
-}
 
 void MovingPlatform::update()
 {
@@ -96,7 +86,7 @@ void MovingPlatform::update()
 	//stores the direction to target position
 	glm::vec3 dir = to - from;
 	//stores the distance between startingPos and endPos
-	float distance = length(dir);
+	float distance = Utils::length(dir);
 
 	//normalises the vector to make it a unit vector
 	dir /= distance;
@@ -106,9 +96,9 @@ void MovingPlatform::update()
 	currentPos += offset;
 	
 	glm::vec3 dirToTarget = to - currentPos;
-	dirToTarget /= length(dirToTarget);
+	dirToTarget /= Utils::length(dirToTarget);
 
-	float dp = dot(dir, dirToTarget);
+	float dp = Utils::dot(dir, dirToTarget);
 	if ( dp < 0)
 	{
 		currentPos = to;

@@ -1,6 +1,7 @@
 #include "hobgoblin.h"
 #include <SDL_ttf.h>
 #include "Utils.h"
+#include "collectable.h"
 using namespace std;
 
 
@@ -37,6 +38,7 @@ void Hobgoblin::initialise()
 	pos.y = 1.2f;
 	pos.z = -60.0f;
 	rotate = 0;
+	currBunny = nullptr;
 }
 
 void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
@@ -67,7 +69,11 @@ void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
 
 void Hobgoblin::update(void)
 {
-	currentAnim = 0;
+	if (currentAnim != 11 || ((currentAnim == 11) && (tmpModel.getCurrentFrame()==134)))
+	{
+		currentAnim = 0;
+	}
+	
 
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
@@ -111,7 +117,7 @@ void Hobgoblin::update(void)
 		rotate += 0.4;
 	}
 
-	
+
 
 	if (keys[SDL_SCANCODE_Z]) {
 		if (--currentAnim < 0) currentAnim = 19;
@@ -121,4 +127,16 @@ void Hobgoblin::update(void)
 		if (++currentAnim >= 20) currentAnim = 0;
 		cout << "Current animation: " << currentAnim << endl;
 	}
+
+	if (keys[SDL_SCANCODE_SPACE])
+	{
+		currentAnim = 11;
+		
+		if (currBunny)
+		{
+			currBunny->pickUp();
+		}
+	}
+	currBunny = nullptr;
+	
 }

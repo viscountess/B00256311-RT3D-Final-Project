@@ -1,4 +1,5 @@
 #include "bunnyPickup.h"
+#include "Utils.h"
 
 using namespace std;
 
@@ -16,11 +17,14 @@ BunnyPickup::~BunnyPickup()
 
 void BunnyPickup::initialise()
 {
+	rotate = 0;
+	isPickedUp = false;
+
 	material0 = {
-		{ 0.0f, 0.0f, 0.0f, 1.0f }, // ambient
+		{ 1.0f, 1.0f, 0.0f, 1.0f }, // ambient
 		{ 0.5f, 0.5f, 0.5f, 1.0f }, // diffuse
-		{ 0.0f, 0.1f, 0.0f, 1.0f }, // specular
-		2.0f  // shininess
+		{ 0.1f, 0.5f, 0.1f, 1.0f }, // specular
+		4.0f  // shininess
 	};
 
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
@@ -39,17 +43,32 @@ void BunnyPickup::initialise()
 
 void BunnyPickup::render(std::stack<glm::mat4>& _Stack)
 {
+	//if the bunny has been picked up,
+	//then dont bother rendering
+	if (isPickedUp)
+		return;
+
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	_Stack.push(_Stack.top());
 	_Stack.top() = glm::translate(_Stack.top(), bunnyPos);
-	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(5.0f, 0.1f, 5.0f));
+	_Stack.top() = glm::rotate(_Stack.top(), rotate+90.f, glm::vec3(0.0f, 5.0f, 0.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(5.0f, 5.0f, 5.0f));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(_Stack.top()));
 	rt3d::setMaterial(shaderProgram, material0);
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	_Stack.pop();
 }
 
-void BunnyPickup::update()
+void BunnyPickup::update(Hobgoblin *player)
 {
-
+		rotate += 0.8;
+		
+		glm::vec3 toPlayer = player->getPos() - bunnyPos;
+		//flatten the vectors so that they are on the same height
+		toPlayer.y = 0;
+		if (Utils::length(toPlayer) < 1)
+		{
+			player->setCurrCollectable(this);
+		}
+	
 }

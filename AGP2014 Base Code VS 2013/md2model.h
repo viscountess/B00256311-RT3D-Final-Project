@@ -172,6 +172,7 @@ public:
 	void Animate(int animation, float dt);
 	void Animate(float dt) { Animate(currentAnim, dt); }
 	int setCurrentAnim(int n);
+	int getCurrentFrame() { return currentFrame; }
 private:
 	md2_model_t mdl;
 	int currentAnim;

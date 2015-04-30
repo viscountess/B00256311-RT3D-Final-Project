@@ -21,6 +21,7 @@
 #include "lavaground.h"
 #include "movingPlatform.h"
 #include "largeRock.h"
+#include "bunnyPickup.h"
 #include <SDL_ttf.h>
 
 using namespace std;
@@ -49,6 +50,12 @@ LavaGround *lavapool;
 //so I can just change the number in one place
 const int numOfmPlatforms = 6;
 MovingPlatform *mPlatform[numOfmPlatforms];
+
+//Array of Golden Bunny collectables
+//Also including a const variable to store number of bunnies
+//so that it can be changed in one place
+const int numOfgBunnies = 1;
+BunnyPickup *gBunnies[numOfgBunnies];
 
 //Pointer for an array of large rocks that will be displayed around the level
 //-these will form a wall around the platforms
@@ -206,6 +213,15 @@ void init(void) {
 		lrgRock[j]->initialise();
 	}
 
+	//Positions of Golden Bunnies
+	gBunnies[0] = new BunnyPickup(glm::vec3(30.0f, -0.1f, -50.0f));
+
+	//Golden bunny pickup initialised
+	for (int k = 0; k < numOfgBunnies; k++)
+	{
+		gBunnies[k]->initialise();
+	}
+
 	myHobgoblin = new Hobgoblin();
 	myHobgoblin->initialise();
 
@@ -254,6 +270,11 @@ void update(void) {
 	for (int i = 0; i < numOfmPlatforms; i++)
 	{
 		mPlatform[i]->update();
+	}
+
+	for (int j = 0; j < numOfgBunnies; j++)
+	{
+		gBunnies[j]->update(myHobgoblin);
 	}
 
 	myHobgoblin->update();
@@ -323,6 +344,12 @@ void draw(SDL_Window * window) {
 	for (int j = 0; j < 1; j++)
 	{
 		lrgRock[j]->render(mvStack);
+	}
+
+	//drawing golden bunnies here
+	for (int k = 0; k < numOfgBunnies; k++)
+	{
+		gBunnies[k]->render(mvStack);
 	}
 
 	//draw the hobgoblin

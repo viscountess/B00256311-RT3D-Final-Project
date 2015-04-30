@@ -10,6 +10,8 @@
 #include <stack>
 #include <SDL_ttf.h>
 
+class Collectable;
+
 class Hobgoblin
 {
 public:
@@ -22,6 +24,10 @@ public:
 	void update(void);
 	glm::vec3 getPos() { return pos; }
 	float getRotate() { return rotate; }
+
+	
+	//So that the collectable object can tell the player that it's in contact with it
+	void setCurrCollectable(Collectable *_collectable){ currBunny = _collectable; };
 
 private:
 	// md2 stuff
@@ -42,6 +48,8 @@ private:
 	//GLfloat Zpos;
 
 	float rotate;
+
+	Collectable *currBunny;
 };
 
 

@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
 
+
 class BunnyPickup : public Collectable
 {
 public:
@@ -21,7 +22,8 @@ public:
 
 	virtual void initialise();
 	virtual void render(std::stack<glm::mat4>& _Stack);
-	virtual void update();
+	virtual void update(Hobgoblin *player);
+	virtual void pickUp() { isPickedUp = true; }
 
 private:
 
@@ -37,6 +39,9 @@ private:
 
 	//member variable for position of bunny
 	glm::vec3 bunnyPos;
+
+	float rotate;
+	bool isPickedUp;
 };
 
 #endif //BUNNY_PICKUP_INCLUDE
