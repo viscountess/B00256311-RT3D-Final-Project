@@ -10,7 +10,9 @@
 #include <stack>
 #include <SDL_ttf.h>
 
+//forward declarations of classes
 class Collectable;
+class MovingPlatform;
 
 class Hobgoblin
 {
@@ -27,7 +29,10 @@ public:
 
 	
 	//So that the collectable object can tell the player that it's in contact with it
-	void setCurrCollectable(Collectable *_collectable){ currBunny = _collectable; };
+	void setCurrCollectable(Collectable *_collectable){ currBunny = _collectable; }
+
+	//This function will tell the program that the player is in contact with the moving platform
+	void setCurrPlatform(MovingPlatform *_currPlatform){ currPlatform = _currPlatform; }
 
 private:
 	// md2 stuff
@@ -50,6 +55,8 @@ private:
 	float rotate;
 
 	Collectable *currBunny;
+
+	MovingPlatform *currPlatform;
 };
 
 

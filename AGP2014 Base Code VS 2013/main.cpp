@@ -276,7 +276,7 @@ void update(void) {
 
 	for (int i = 0; i < numOfmPlatforms; i++)
 	{
-		mPlatform[i]->update();
+		mPlatform[i]->update(myHobgoblin);
 	}
 
 	for (int j = 0; j < numOfgBunnies; j++)

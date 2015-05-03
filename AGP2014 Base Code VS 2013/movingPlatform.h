@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
+#include "hobgoblin.h"
 
 class MovingPlatform
 {
@@ -21,7 +22,9 @@ public:
 
 	void render(std::stack<glm::mat4>& _Stack);
 
-	void update();
+	void update(Hobgoblin *player);
+
+	glm::vec3 getOffset() { return offsetThisTick; }
 
 private:
 
@@ -44,5 +47,10 @@ private:
 	int m_direction;
 
 	float waitTime;
+
+	//member variable for getting the amount the platform has moved this framed
+	glm::vec3 offsetThisTick;
+
+	
 };
 #endif //MOVING_PLATFORM_INCLUDE

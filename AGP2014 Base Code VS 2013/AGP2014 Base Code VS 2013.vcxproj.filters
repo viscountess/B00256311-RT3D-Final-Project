@@ -27,6 +27,30 @@
     <ClCompile Include="rt3dObjLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hobgoblin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ground.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lavaground.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="movingPlatform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="largeRock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bunnyPickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anorms.h">
@@ -39,6 +63,36 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rt3dObjLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hobgoblin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ground.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lavaground.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="movingPlatform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="largeRock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="collectable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bunnyPickup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -73,5 +127,31 @@
     <None Include="mvp.vert">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="town-skybox\skybox_hell_back.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\skybox_hell_front.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\skybox_hell_left.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\skybox_hell_right.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="town-skybox\skybox_hell_top.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="rock_texture.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="hot-lava-flow.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="stone_texture.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include <SDL_ttf.h>
 #include "Utils.h"
 #include "collectable.h"
+#include "movingPlatform.h"
 using namespace std;
 
 
@@ -39,6 +40,7 @@ void Hobgoblin::initialise()
 	pos.z = -60.0f;
 	rotate = 0;
 	currBunny = nullptr;
+	currPlatform = nullptr;
 }
 
 void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
@@ -79,7 +81,7 @@ void Hobgoblin::update(void)
 
 	if (keys[SDL_SCANCODE_W]){
 		//eye = moveForward(eye, r, 0.1f);
-		//pos.z += 0.1f;
+		//pos.z += 0.1f;d
 		pos = Utils::moveForward(pos, rotate, -0.1f);
 		currentAnim = 1;
 
@@ -139,4 +141,11 @@ void Hobgoblin::update(void)
 	}
 	currBunny = nullptr;
 	
+	//If the hobgoblin is on a moving platform
+	if (currPlatform)
+	{
+		//then move hobgoblin with platform
+		pos += currPlatform->getOffset();
+	}
+	currPlatform = nullptr;
 }

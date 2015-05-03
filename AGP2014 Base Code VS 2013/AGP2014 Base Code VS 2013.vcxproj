@@ -81,16 +81,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bunnyPickup.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="ground.cpp" />
+    <ClCompile Include="hobgoblin.cpp" />
+    <ClCompile Include="largeRock.cpp" />
+    <ClCompile Include="lavaground.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="md2model.cpp" />
+    <ClCompile Include="movingPlatform.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="rt3dObjLoader.cpp" />
+    <ClCompile Include="skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anorms.h" />
+    <ClInclude Include="bunnyPickup.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="collectable.h" />
+    <ClInclude Include="ground.h" />
+    <ClInclude Include="hobgoblin.h" />
+    <ClInclude Include="largeRock.h" />
+    <ClInclude Include="lavaground.h" />
     <ClInclude Include="md2model.h" />
+    <ClInclude Include="movingPlatform.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="rt3dObjLoader.h" />
+    <ClInclude Include="skybox.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gouraud.vert" />
@@ -103,6 +121,16 @@
     <None Include="simple.frag" />
     <None Include="textured.frag" />
     <None Include="textured.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="hot-lava-flow.bmp" />
+    <Image Include="rock_texture.bmp" />
+    <Image Include="stone_texture.bmp" />
+    <Image Include="town-skybox\skybox_hell_back.bmp" />
+    <Image Include="town-skybox\skybox_hell_front.bmp" />
+    <Image Include="town-skybox\skybox_hell_left.bmp" />
+    <Image Include="town-skybox\skybox_hell_right.bmp" />
+    <Image Include="town-skybox\skybox_hell_top.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

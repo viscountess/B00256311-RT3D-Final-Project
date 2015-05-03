@@ -64,11 +64,27 @@ void MovingPlatform::render(std::stack<glm::mat4>& _Stack)
 
 
 
-void MovingPlatform::update()
+void MovingPlatform::update(Hobgoblin *player)
 {
+	//collision detection for the player on moving platform
+	glm::vec3 playerPos = player->getPos();
+	if (playerPos.x > currentPos.x - 5 &&
+		playerPos.x < currentPos.x + 5 &&
+		playerPos.z > currentPos.z - 5 &&
+		playerPos.z < currentPos.z + 5)
+	{
+		player->setCurrPlatform(this);
+	}
+
+
 	waitTime -= 0.1;
+
 	if (waitTime > 0)
+	{
+		offsetThisTick = glm::vec3(0, 0, 0); //This is to make sure the player doesnt keep moving when the moving platform has stopped
 		return;
+	}
+		
 	glm::vec3 to;
 	glm::vec3 from;
 
@@ -91,9 +107,9 @@ void MovingPlatform::update()
 	//normalises the vector to make it a unit vector
 	dir /= distance;
 
-	glm::vec3 offset = dir;
-	offset *= 0.1; //speed
-	currentPos += offset;
+	offsetThisTick = dir;
+	offsetThisTick *= 0.1; //speed
+	currentPos += offsetThisTick;
 	
 	glm::vec3 dirToTarget = to - currentPos;
 	dirToTarget /= Utils::length(dirToTarget);
@@ -105,5 +121,7 @@ void MovingPlatform::update()
 		m_direction *= -1;
 		waitTime = 20; //waiting time before the platform moves
 	}
+
+
 
 }
