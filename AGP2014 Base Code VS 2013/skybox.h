@@ -15,14 +15,18 @@ public:
 	~Skybox(); //deconstructor
 	void initialise();
 	void render(std::stack<glm::mat4>& _stack, glm::mat4& _projection);
+
+	GLuint getShaderProgram() { return skyboxProgram; }
+	GLuint getMeshIndexCount() { return meshIndexCount; }
+	GLuint getMeshObjects() { return meshObjects; }
 private:
 
 	GLuint skyboxProgram;
 	GLuint skybox[5];
 
-	GLuint meshIndexCount = 0;
-	GLuint md2VertCount = 0;
-	GLuint meshObjects[2];
+	GLuint meshIndexCount;
+	GLuint md2VertCount;
+	GLuint meshObjects;
 };
 
 

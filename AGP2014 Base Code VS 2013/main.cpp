@@ -31,9 +31,9 @@ using namespace std;
 // Globals
 // Real programs don't use globals :-D
 
-GLuint meshIndexCount = 0;
-GLuint md2VertCount = 0;
-GLuint meshObjects[2];
+//GLuint meshIndexCount = 0;
+//GLuint md2VertCount = 0;
+//GLuint meshObjects[2];
 
 GLuint shaderProgram;
 
@@ -367,7 +367,7 @@ void draw(SDL_Window * window) {
 	myHobgoblin->render(mvStack);
 
 	
-
+	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(projection));
 
 	/*////////////////////////////////////////////////////////////////////
 	//This renders a 3D label
@@ -380,7 +380,7 @@ void draw(SDL_Window * window) {
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 0.0f));
 	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();
+	mvStack.pop();*/
 
 
 
@@ -388,24 +388,21 @@ void draw(SDL_Window * window) {
 	//This renders a HUD label
 	////////////////////////////////////////////////////////////////////
 
-	glUseProgram(skyboxProgram);//Use texture-only shader for text rendering
+	glUseProgram(mySkybox->getShaderProgram());//Use texture-only shader for text rendering
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 	glBindTexture(GL_TEXTURE_2D, labels[0]);
 	mvStack.push(glm::mat4(1.0));
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-0.8f, 0.8f, 0.0f));
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.20f, 0.2f, 0.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(mvStack.top()));
 
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
 	mvStack.pop();
 	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
 
-
-
-
 	// remember to use at least one pop operation per push...
-	mvStack.pop(); // initial matrix*/
+	mvStack.pop(); // initial matrix
 	glDepthMask(GL_TRUE);
 	
 	SDL_GL_SwapWindow(window); // swap buffers

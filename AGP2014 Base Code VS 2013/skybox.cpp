@@ -33,7 +33,7 @@ void Skybox::initialise()
 	rt3d::loadObj("cube.obj", verts, norms, tex_coords, indices);
 	GLuint size = indices.size();
 	meshIndexCount = size;
-	meshObjects[0] = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
+	meshObjects = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 }
 
 void Skybox::render(std::stack<glm::mat4>& _mvStack, glm::mat4& _projection)
@@ -51,7 +51,7 @@ void Skybox::render(std::stack<glm::mat4>& _mvStack, glm::mat4& _projection)
 	_mvStack.top() = glm::scale(_mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
 	_mvStack.top() = glm::translate(_mvStack.top(), glm::vec3(0.0f, 0.0f, -2.0f));
 	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(_mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 	_mvStack.pop();
 
 	// back
@@ -60,7 +60,7 @@ void Skybox::render(std::stack<glm::mat4>& _mvStack, glm::mat4& _projection)
 	_mvStack.top() = glm::scale(_mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
 	_mvStack.top() = glm::translate(_mvStack.top(), glm::vec3(0.0f, 0.0f, 2.0f));
 	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(_mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 	_mvStack.pop();
 
 	// left
@@ -69,7 +69,7 @@ void Skybox::render(std::stack<glm::mat4>& _mvStack, glm::mat4& _projection)
 	_mvStack.top() = glm::scale(_mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
 	_mvStack.top() = glm::translate(_mvStack.top(), glm::vec3(-2.0f, 0.0f, 0.0f));
 	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(_mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 	_mvStack.pop();
 
 	// right
@@ -78,7 +78,7 @@ void Skybox::render(std::stack<glm::mat4>& _mvStack, glm::mat4& _projection)
 	_mvStack.top() = glm::scale(_mvStack.top(), glm::vec3(2.0f, 2.0f, 2.0f));
 	_mvStack.top() = glm::translate(_mvStack.top(), glm::vec3(2.0f, 0.0f, 0.0f));
 	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(_mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	rt3d::drawIndexedMesh(meshObjects, meshIndexCount, GL_TRIANGLES);
 	_mvStack.pop();
 
 
