@@ -12,7 +12,7 @@ class LargeRock
 {
 public:
 	//constructor
-	LargeRock();
+	LargeRock(glm::vec3 _rockPos, float _rockScale);
 
 	//deconstructor
 	~LargeRock();
@@ -20,6 +20,9 @@ public:
 	void initialise();
 
 	void render(std::stack<glm::mat4>& _Stack);
+
+	glm::vec3 getRockPos(){ return rockPos; }
+	float getRockRadius(){ return rockRadius; }
 
 private:
 
@@ -32,5 +35,10 @@ private:
 	GLuint textures[2];
 
 	rt3d::materialStruct material0;
+
+	float rockRadius;
+
+	glm::vec3 rockPos; //rock position
+	float rockScale; //rock scale
 };
 #endif //LARGE_ROCK_INCLUDE

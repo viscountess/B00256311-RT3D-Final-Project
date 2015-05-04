@@ -69,8 +69,10 @@ void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
 }
 
 
-void Hobgoblin::update(void)
+void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 {
+	glm::vec3 previousPos = pos;
+
 	if (currentAnim != 11 || ((currentAnim == 11) && (tmpModel.getCurrentFrame()==134)))
 	{
 		currentAnim = 0;
@@ -148,4 +150,30 @@ void Hobgoblin::update(void)
 		pos += currPlatform->getOffset();
 	}
 	currPlatform = nullptr;
+
+	for (int i = 0; i < numberOfRocks; i++)
+	{
+		LargeRock *currRock = _rocks[i];
+		//A local vector representing the difference between the player and the rock
+		glm::vec3 diff = pos - currRock->getRockPos();
+		diff.y = 0;
+
+		if (Utils::length(diff) < (currRock->getRockRadius() +0.5))
+		{
+//			pos = previousPos;
+//			break;
+
+			//normalising the diff length
+			diff /= Utils::length(diff);
+
+			//this pushes the player to the outer limits of the rock
+			//so that player can walk around the rock
+			diff *= (currRock->getRockRadius()+0.5);
+
+			float height = pos.y;
+			pos = currRock->getRockPos() + diff;
+			pos.y = height;
+			break;
+		}
+	}
 }

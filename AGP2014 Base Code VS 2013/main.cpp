@@ -209,7 +209,7 @@ void init(void) {
 	//Large Rocks initialised
 	for (int j = 0; j < 1; j++)
 	{
-		lrgRock[j] = new LargeRock();
+		lrgRock[j] = new LargeRock(glm::vec3(2.0f, 0.1f, -42.0f), 0.2);
 		lrgRock[j]->initialise();
 	}
 
@@ -284,7 +284,7 @@ void update(void) {
 		gBunnies[j]->update(myHobgoblin);
 	}
 
-	myHobgoblin->update();
+	myHobgoblin->update(lrgRock, 1);
 	/*if ( keys[SDL_SCANCODE_Z] ) {
 		if (--currentAnim < 0) currentAnim = 19;
 		cout << "Current animation: " << currentAnim << endl;

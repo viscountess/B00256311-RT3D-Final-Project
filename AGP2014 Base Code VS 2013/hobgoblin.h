@@ -9,10 +9,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
 #include <SDL_ttf.h>
+#include "largeRock.h"
 
 //forward declarations of classes
 class Collectable;
 class MovingPlatform;
+
 
 class Hobgoblin
 {
@@ -23,7 +25,7 @@ public:
 	~Hobgoblin();
 	void initialise();
 	void render(std::stack<glm::mat4>& _stack);
-	void update(void);
+	void update(LargeRock **_rocks, int numberOfRocks);
 	glm::vec3 getPos() { return pos; }
 	float getRotate() { return rotate; }
 
