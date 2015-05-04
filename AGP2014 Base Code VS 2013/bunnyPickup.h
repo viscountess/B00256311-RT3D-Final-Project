@@ -14,7 +14,7 @@ class BunnyPickup : public Collectable
 {
 public:
 
-	//coonstructor
+	//constructor
 	BunnyPickup(glm::vec3 _bunnyPos);
 
 	//deconstructor

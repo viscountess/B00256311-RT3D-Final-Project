@@ -22,6 +22,7 @@
 #include "movingPlatform.h"
 #include "largeRock.h"
 #include "bunnyPickup.h"
+#include "onscreenHUD.h"
 #include <SDL_ttf.h>
 
 using namespace std;

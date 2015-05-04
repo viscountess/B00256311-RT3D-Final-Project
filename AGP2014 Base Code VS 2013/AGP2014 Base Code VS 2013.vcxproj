@@ -90,6 +90,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="md2model.cpp" />
     <ClCompile Include="movingPlatform.cpp" />
+    <ClCompile Include="onscreenHUD.cpp" />
     <ClCompile Include="rt3d.cpp" />
     <ClCompile Include="rt3dObjLoader.cpp" />
     <ClCompile Include="skybox.cpp" />
@@ -105,9 +106,11 @@
     <ClInclude Include="lavaground.h" />
     <ClInclude Include="md2model.h" />
     <ClInclude Include="movingPlatform.h" />
+    <ClInclude Include="onscreenHUD.h" />
     <ClInclude Include="rt3d.h" />
     <ClInclude Include="rt3dObjLoader.h" />
     <ClInclude Include="skybox.h" />
+    <ClInclude Include="TextBase.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
