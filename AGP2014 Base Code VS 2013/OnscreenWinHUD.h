@@ -1,5 +1,5 @@
-#ifndef ONSCREEN_HUD_INCLUDE
-#define ONSCREEN_HUD_INCLUDE
+#ifndef ONSCREEN_WIN_HUD_INCLUDE
+#define ONSCREEN_WIN_HUD_INCLUDE
 
 #include "TextBase.h"
 #include "rt3d.h"
@@ -14,19 +14,19 @@
 class Skybox;
 class Hobgoblin;
 
-class OnscreenHUD : public TextBase
+
+class OnscreenWinHUD : public TextBase
 {
 public:
-
 	//constructor
-	OnscreenHUD();
+	OnscreenWinHUD();
 
 	//deconstructor
-	~OnscreenHUD();
+	~OnscreenWinHUD();
 
-	virtual void initialise();
-	virtual void render(std::stack<glm::mat4>& _Stack, Skybox *mySkybox);
-	virtual void update(Hobgoblin *myHobgoblin);
+	void initialise();
+	void render(std::stack<glm::mat4>& _Stack, Skybox *mySkybox);
+	void update(Hobgoblin *myHobgoblin);
 	GLuint textToTexture(const char * str);
 	void reset();
 
@@ -35,8 +35,8 @@ private:
 	GLuint labels[5];
 	TTF_Font * textFont;
 
-	//number of collectables collected
-	int currCollectCount;
+	//member variable for if winning screen is active
+	bool isActive;
 };
 
-#endif //ONSCREEN_HUD_INCLUDE
+#endif //ONSCREEN_WIN_HUD_INCLUDE

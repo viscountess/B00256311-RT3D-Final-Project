@@ -35,6 +35,12 @@ void Hobgoblin::initialise()
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
 	//rt3d::setLight(shaderProgram, light0);
 
+	reset();
+}
+
+//Reset the gameplay values
+void Hobgoblin::reset()
+{
 	pos.x = 20.0f;
 	pos.y = 1.2f;
 	pos.z = -60.0f;
@@ -42,6 +48,8 @@ void Hobgoblin::initialise()
 	currBunny = nullptr;
 	currPlatform = nullptr;
 	collectCounter = 0;
+	//This is the maximum number of collectables in the game
+	maxNumOfCollectables = 8;
 }
 
 void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
@@ -72,6 +80,10 @@ void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
 
 void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 {
+	//If the player has won just stop updating
+	if (hasWon())
+		return;
+
 	glm::vec3 previousPos = pos;
 
 	if (currentAnim != 11 || ((currentAnim == 11) && (tmpModel.getCurrentFrame()==134)))
@@ -141,6 +153,9 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 		{
 			currBunny->pickUp();
 			collectCounter++;
+			//if the player has won then play appropiate animation
+			if (hasWon())
+				currentAnim = 7;
 		}
 	}
 	currBunny = nullptr;
@@ -162,9 +177,6 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 
 		if (Utils::length(diff) < (currRock->getRockRadius() +0.5))
 		{
-//			pos = previousPos;
-//			break;
-
 			//normalising the diff length
 			diff /= Utils::length(diff);
 
@@ -175,7 +187,6 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 			float height = pos.y;
 			pos = currRock->getRockPos() + diff;
 			pos.y = height;
-//			break;
 		}
 	}
 }

@@ -28,6 +28,7 @@ public:
 	virtual void render(std::stack<glm::mat4>& _Stack, Skybox *mySkybox) = 0;
 	virtual void update(Hobgoblin *myHobgoblin) = 0;
 	virtual GLuint textToTexture(const char * str) = 0;
+	virtual void reset() = 0;
 
 
 };

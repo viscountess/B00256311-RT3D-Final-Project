@@ -26,6 +26,8 @@ public:
 
 	glm::vec3 getOffset() { return offsetThisTick; }
 
+	void reset();
+
 private:
 
 	GLuint meshIndexCount = 0;

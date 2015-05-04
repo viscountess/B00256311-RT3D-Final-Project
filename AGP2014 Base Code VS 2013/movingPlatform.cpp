@@ -31,7 +31,7 @@ void MovingPlatform::initialise()
 		2.0f  // shininess
 	};
 
-	waitTime = 0;
+	reset();
 
 	shaderProgram = rt3d::initShaders("phong-tex.vert", "phong-tex.frag");
 	rt3d::setMaterial(shaderProgram, material0);
@@ -46,6 +46,17 @@ void MovingPlatform::initialise()
 	textures[0] = rt3d::loadBitmap("rock_texture.bmp");
 	meshObjects[0] = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 
+}
+
+//Reset all moving platform elements that change throughout the game
+void MovingPlatform::reset()
+{
+	waitTime = 0;
+
+	currentPos = startingPos;
+
+	//direction of travel
+	m_direction = 1;
 }
 
 void MovingPlatform::render(std::stack<glm::mat4>& _Stack)

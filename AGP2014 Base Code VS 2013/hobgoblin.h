@@ -29,6 +29,9 @@ public:
 	glm::vec3 getPos() { return pos; }
 	float getRotate() { return rotate; }
 	int getCollectCounter() { return collectCounter; }
+	bool hasWon(){ return collectCounter == maxNumOfCollectables; }
+	bool hasDied() { return false; }
+	void reset();
 
 	
 	//So that the collectable object can tell the player that it's in contact with it
@@ -63,6 +66,9 @@ private:
 
 	//member variable for collectable counter
 	int collectCounter;
+
+	//member variable for maximum number of collectables
+	int maxNumOfCollectables;
 };
 
 

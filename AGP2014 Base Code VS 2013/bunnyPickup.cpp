@@ -17,8 +17,7 @@ BunnyPickup::~BunnyPickup()
 
 void BunnyPickup::initialise()
 {
-	rotate = 0;
-	isPickedUp = false;
+	reset();
 
 	material0 = {
 		{ 1.0f, 1.0f, 0.0f, 1.0f }, // ambient
@@ -39,6 +38,13 @@ void BunnyPickup::initialise()
 	meshIndexCount = size;
 	textures[0] = rt3d::loadBitmap("rock_texture.bmp");
 	meshObjects[0] = rt3d::createMesh(verts.size() / 3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
+}
+
+//Resets the gameplay values for BunnyPickup class
+void BunnyPickup::reset()
+{
+	rotate = 0;
+	isPickedUp = false;
 }
 
 void BunnyPickup::render(std::stack<glm::mat4>& _Stack)

@@ -24,6 +24,7 @@ public:
 	virtual void render(std::stack<glm::mat4>& _Stack) = 0;
 	virtual void update(Hobgoblin *player) = 0;
 	virtual void pickUp() = 0;
+	virtual void reset() = 0;
 	
 };
 

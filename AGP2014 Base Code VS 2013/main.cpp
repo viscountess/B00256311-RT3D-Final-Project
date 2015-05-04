@@ -23,6 +23,7 @@
 #include "largeRock.h"
 #include "bunnyPickup.h"
 #include "onscreenHUD.h"
+#include "OnscreenWinHUD.h"
 #include <SDL_ttf.h>
 
 using namespace std;
@@ -45,6 +46,7 @@ Hobgoblin *myHobgoblin;
 Camera *myCamera;
 
 OnscreenHUD *myHUD;
+OnscreenWinHUD *myWinScreen;
 
 Ground *myGround;
 LavaGround *lavapool;
@@ -217,6 +219,9 @@ void init(void) {
 	myHUD = new OnscreenHUD();
 	myHUD->initialise();
 
+	myWinScreen = new OnscreenWinHUD();
+	myWinScreen->initialise();
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
@@ -233,6 +238,31 @@ void init(void) {
 	//labels[0] = textToTexture(" HUD label ");
 	//labels[1] = textToTexture(" 3D label ");
 
+}
+
+//Reset everything in the game
+void reset()
+{
+	//Moving Platforms reset
+	for (int i = 0; i < numOfmPlatforms; i++)
+	{
+
+		mPlatform[i]->reset();
+	}
+
+	//Golden bunny pickup reset
+	for (int k = 0; k < numOfgBunnies; k++)
+	{
+		gBunnies[k]->reset();
+	}
+
+	myHobgoblin->reset();
+
+	myCamera->reset();
+
+	myHUD->reset();
+
+	myWinScreen->reset();
 }
 
 void update(void) {
@@ -256,6 +286,16 @@ void update(void) {
 		glEnable(GL_CULL_FACE);
 	}
 
+	//if the Hobgoblin has won then allow the player to press R for reset
+	if (myHobgoblin->hasWon())
+	{ 
+		if (keys[SDL_SCANCODE_R])
+		{
+			reset();
+		}
+	}
+	
+
 	for (int i = 0; i < numOfmPlatforms; i++)
 	{
 		mPlatform[i]->update(myHobgoblin);
@@ -275,9 +315,10 @@ void update(void) {
 		if (++currentAnim >= 20) currentAnim = 0;
 		cout << "Current animation: " << currentAnim << endl;
 	}*/
-	myCamera->update(myHobgoblin->getPos(), myHobgoblin->getRotate());
+	myCamera->update(myHobgoblin->getPos(), myHobgoblin->getRotate(), myHobgoblin->hasWon());
 
 	myHUD->update(myHobgoblin);
+	myWinScreen->update(myHobgoblin);
 
 	
 }
@@ -349,6 +390,9 @@ void draw(SDL_Window * window) {
 	//draw the onscreen labels here
 	myHUD->render(mvStack, mySkybox);
 
+	//draw win screen here
+	myWinScreen->render(mvStack, mySkybox);
+
 	
 	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(projection));
 
@@ -365,23 +409,6 @@ void draw(SDL_Window * window) {
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();*/
 
-
-
-	//////////////////////////////////////////////////////////////////////
-	////This renders a HUD label
-	//////////////////////////////////////////////////////////////////////
-
-	//glUseProgram(mySkybox->getShaderProgram());//Use texture-only shader for text rendering
-	//glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
-	//glBindTexture(GL_TEXTURE_2D, labels[0]);
-	//mvStack.push(glm::mat4(1.0));
-	//mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-0.8f, 0.8f, 0.0f));
-	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.20f, 0.2f, 0.0f));
-	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
-	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(mvStack.top()));
-
-	//rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
-	//mvStack.pop();
 	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
 
 	//// remember to use at least one pop operation per push...

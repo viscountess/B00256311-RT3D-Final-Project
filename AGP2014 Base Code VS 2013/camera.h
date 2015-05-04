@@ -15,12 +15,15 @@ public:
 	~Camera();
 	void initialise();
 	void render(std::stack<glm::mat4>& _Stack);
-	void update(glm::vec3 _targetPos, float _rotate);
+	void update(glm::vec3 _targetPos, float _rotate, bool spinCam);
+	void reset();
 
 
 private:
 	glm::vec3 eye;
 	glm::vec3 at;
 	glm::vec3 up;
+
+	float extraRotation;
 };
 #endif //CAMERA_INCLUDE
