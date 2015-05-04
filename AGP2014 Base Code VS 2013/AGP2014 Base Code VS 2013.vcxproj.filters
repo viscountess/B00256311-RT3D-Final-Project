@@ -116,6 +116,9 @@
     <ClInclude Include="OnscreenDeadHUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="bass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="phong.frag">

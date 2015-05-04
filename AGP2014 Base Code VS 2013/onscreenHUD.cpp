@@ -90,7 +90,7 @@ void OnscreenHUD::update(Hobgoblin *myHobgoblin)
 GLuint OnscreenHUD::textToTexture(const char * str)
 {
 	TTF_Font *font = textFont;
-	SDL_Color colour = { 255, 255, 255 };
+	SDL_Color colour = { 255, 255, 0 };
 	SDL_Color bg = { 0, 0, 0 };
 
 	SDL_Surface *stringImage;

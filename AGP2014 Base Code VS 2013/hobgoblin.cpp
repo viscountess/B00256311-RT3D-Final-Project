@@ -36,6 +36,18 @@ void Hobgoblin::initialise()
 	//rt3d::setLight(shaderProgram, light0);
 
 	reset();
+
+	/* Initialize default output device */
+	if (!BASS_Init(-1, 44100, 0, 0, NULL))
+		cout << "Can't initialize device";
+
+
+	/* Load a sample from "file" and give it a max of 3 simultaneous
+	playings using playback position as override decider */
+	//sound courtesy of http://www.freesfx.co.uk/
+	pickupSound = loadSound("bunny_pickup.mp3");
+	deathSound = loadSound("death scream.wav");
+
 }
 
 //Reset the gameplay values
@@ -79,6 +91,20 @@ void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
 	glCullFace(GL_BACK);
 }
 
+HSAMPLE Hobgoblin::loadSound(char * filename)
+{
+	HSAMPLE sam;
+	if (sam = BASS_SampleLoad(FALSE, filename, 0, 0, 3, BASS_SAMPLE_OVER_POS))
+		cout << "sample " << filename << " loaded!" << endl;
+	else
+	{
+		cout << "Can't load sample";
+		exit(0);
+	}
+	return sam;
+
+}
+
 
 void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 {
@@ -95,6 +121,13 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 		isDead = true;
 		//if player has died then play appropiate animation
 		currentAnim = 19;
+
+		HCHANNEL ch = BASS_SampleGetChannel(deathSound, FALSE);
+		BASS_ChannelSetAttribute(ch, BASS_ATTRIB_FREQ, 0);
+		BASS_ChannelSetAttribute(ch, BASS_ATTRIB_VOL, 0.2);
+		BASS_ChannelSetAttribute(ch, BASS_ATTRIB_PAN, -1);
+		if (!BASS_ChannelPlay(ch, FALSE))
+			cout << "Can't play sample" << endl;
 		return;
 	}
 		
@@ -168,6 +201,14 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 		{
 			currBunny->pickUp();
 			collectCounter++;
+
+			HCHANNEL ch = BASS_SampleGetChannel(pickupSound, FALSE);
+			BASS_ChannelSetAttribute(ch, BASS_ATTRIB_FREQ, 0);
+			BASS_ChannelSetAttribute(ch, BASS_ATTRIB_VOL, 0.2);
+			BASS_ChannelSetAttribute(ch, BASS_ATTRIB_PAN, -1);
+			if (!BASS_ChannelPlay(ch, FALSE))
+				cout << "Can't play sample" << endl;
+
 			//if the player has won then play appropiate animation
 			if (hasWon())
 				currentAnim = 7;

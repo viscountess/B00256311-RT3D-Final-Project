@@ -10,6 +10,7 @@
 #include <stack>
 #include <SDL_ttf.h>
 #include "largeRock.h"
+#include "bass.h"
 
 //forward declarations of classes
 class Collectable;
@@ -33,6 +34,7 @@ public:
 	bool hasDied() { return isDead; }
 	void reset();
 	void setOnSolidGround(bool onGround) { isOnSolidGround = onGround; }
+	HSAMPLE loadSound(char * filename);
 
 	
 	//So that the collectable object can tell the player that it's in contact with it
@@ -74,6 +76,9 @@ private:
 	bool isOnSolidGround;
 
 	bool isDead;
+
+	HSAMPLE pickupSound;
+	HSAMPLE deathSound;
 };
 
 

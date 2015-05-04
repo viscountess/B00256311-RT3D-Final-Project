@@ -31,11 +31,13 @@ void OnscreenWinHUD::initialise()
 	if (TTF_Init() == -1)
 		cout << "TTF failed to initialise." << endl;
 
-	textFont = TTF_OpenFont("MavenPro-Regular.ttf", 40);
+	//Font courtesy of http://www.dafont.com/
+	textFont = TTF_OpenFont("Royal Inferno.ttf", 30);
 	if (textFont == NULL)
 		cout << "Failed to open font." << endl;
 
-	labels[0] = textToTexture(" Congrats you have won! Press 'R' to restart");
+	labels[0] = textToTexture(" Congrats you have won! ");
+	labels[1] = textToTexture(" Press 'R' to restart ");
 }
 
 //Resetting the win screen
@@ -61,8 +63,17 @@ void OnscreenWinHUD::render(std::stack<glm::mat4>& _Stack, Skybox *mySkybox)
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 	glBindTexture(GL_TEXTURE_2D, labels[0]);
 	_Stack.push(glm::mat4(1.0));
-	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(-0.2f, 0.0f, 0.0f));
-	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(0.60f, 0.4f, 0.0f));
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(0.0f, 0.55f, 0.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(0.80f, 0.2f, 0.0f));
+	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
+	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(_Stack.top()));
+	rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
+	_Stack.pop();
+
+	glBindTexture(GL_TEXTURE_2D, labels[1]);
+	_Stack.push(glm::mat4(1.0));
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(0.0f, -0.6f, 0.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(0.80f, 0.2f, 0.0f));
 	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
 	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(_Stack.top()));
 	rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
@@ -79,7 +90,7 @@ void OnscreenWinHUD::update(Hobgoblin *myHobgoblin)
 GLuint OnscreenWinHUD::textToTexture(const char * str)
 {
 	TTF_Font *font = textFont;
-	SDL_Color colour = { 255, 255, 255 };
+	SDL_Color colour = { 255, 255, 0 };
 	SDL_Color bg = { 0, 0, 0 };
 
 	SDL_Surface *stringImage;
