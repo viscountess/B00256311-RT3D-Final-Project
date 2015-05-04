@@ -41,6 +41,7 @@ void Hobgoblin::initialise()
 	rotate = 0;
 	currBunny = nullptr;
 	currPlatform = nullptr;
+	collectCounter = 0;
 }
 
 void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
@@ -139,6 +140,7 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 		if (currBunny)
 		{
 			currBunny->pickUp();
+			collectCounter++;
 		}
 	}
 	currBunny = nullptr;

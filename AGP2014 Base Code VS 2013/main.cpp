@@ -44,6 +44,8 @@ Hobgoblin *myHobgoblin;
 
 Camera *myCamera;
 
+OnscreenHUD *myHUD;
+
 Ground *myGround;
 LavaGround *lavapool;
 //Array of moving platforms
@@ -62,7 +64,7 @@ BunnyPickup *gBunnies[numOfgBunnies];
 //-these will form a wall around the platforms
 //One rock for now to ensure I can load the rock correctly
 //with texture and collision working
-const int numOfrocks = 2;
+const int numOfrocks = 22;
 LargeRock *lrgRock[numOfrocks];
 
 GLfloat r = 0.0f;
@@ -72,7 +74,7 @@ stack<glm::mat4> mvStack;
 // TEXTURE STUFF
 GLuint textures[2];
 
-GLuint labels[5];
+//GLuint labels[5];
 
 rt3d::lightStruct light0 = {
 	{0.3f, 0.3f, 0.3f, 1.0f}, // ambient
@@ -95,57 +97,6 @@ rt3d::materialStruct material1 = {
 	{0.8f, 0.8f, 0.8f, 1.0f}, // specular
 	1.0f  // shininess
 };
-
-TTF_Font * textFont;
-
-// textToTexture
-GLuint textToTexture(const char * str/*, TTF_Font *font, SDL_Color colour, GLuint &w,GLuint &h */) {
-	TTF_Font *font = textFont;
-	SDL_Color colour = { 255, 255, 255 };
-	SDL_Color bg = { 0, 0, 0 };
-
-	SDL_Surface *stringImage;
-	stringImage = TTF_RenderText_Blended(font,str,colour);
-
-	if (stringImage == NULL)
-		//exitFatalError("String surface not created.");
-		std::cout << "String surface not created." << std::endl;
-
-	GLuint w = stringImage->w;
-	GLuint h = stringImage->h;
-	GLuint colours = stringImage->format->BytesPerPixel;
-
-	GLuint format, internalFormat;
-	if (colours == 4) {   // alpha
-		if (stringImage->format->Rmask == 0x000000ff)
-			format = GL_RGBA;
-	    else
-		    format = GL_BGRA;
-	} else {             // no alpha
-		if (stringImage->format->Rmask == 0x000000ff)
-			format = GL_RGB;
-	    else
-		    format = GL_BGR;
-	}
-	internalFormat = (colours == 4) ? GL_RGBA : GL_RGB;
-
-	GLuint texture;
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, w, h, 0,
-                    format, GL_UNSIGNED_BYTE, stringImage->pixels);
-
-	// SDL surface was used to generate the texture but is no longer
-	// required. Release it to free memory
-	SDL_FreeSurface(stringImage);
-	return texture;
-}
-
 
 // Set up rendering context
 SDL_Window * setupRC(SDL_GLContext &context) {
@@ -209,8 +160,31 @@ void init(void) {
 	}
 
 	//Positions of large rocks
+	//main ground
 	lrgRock[0] = new LargeRock(glm::vec3(2.0f, 0.1f, -42.0f), 0.2, 0);
 	lrgRock[1] = new LargeRock(glm::vec3(8.0f, 0.1f, -42.0f), 0.2, 0);
+	lrgRock[2] = new LargeRock(glm::vec3(1.8f, 0.1f, -48.0f), 0.2, 90.0f);
+	lrgRock[3] = new LargeRock(glm::vec3(1.8f, 0.1f, -54.0f), 0.2, 90.0f);
+	lrgRock[4] = new LargeRock(glm::vec3(1.8f, 0.1f, -60.0f), 0.2, 90.0f);
+	lrgRock[5] = new LargeRock(glm::vec3(1.8f, 0.1f, -66.0f), 0.2, 90.0f);
+	lrgRock[6] = new LargeRock(glm::vec3(1.8f, 0.1f, -72.0f), 0.2, 90.0f);
+	lrgRock[7] = new LargeRock(glm::vec3(1.8f, 0.1f, -78.0f), 0.2, 90.0f);
+
+	lrgRock[8] = new LargeRock(glm::vec3(5.0f, 0.1f, -80.0f), 0.2, 0);
+	lrgRock[9] = new LargeRock(glm::vec3(10.0f, 0.1f, -80.0f), 0.4, 0);
+	lrgRock[10] = new LargeRock(glm::vec3(17.0f, 0.1f, -80.0f), 0.2, 0);
+	lrgRock[11] = new LargeRock(glm::vec3(22.0f, 0.1f, -80.0f), 0.3, 0);
+	lrgRock[12] = new LargeRock(glm::vec3(28.0f, 0.1f, -80.0f), 0.2, 0);
+	lrgRock[13] = new LargeRock(glm::vec3(34.0f, 0.1f, -80.0f), 0.2, 0);
+
+	lrgRock[14] = new LargeRock(glm::vec3(40.0f, 0.1f, -80.0f), 0.4, 90);
+	lrgRock[15] = new LargeRock(glm::vec3(40.0f, 0.1f, -72.0f), 0.2, 90);
+	lrgRock[16] = new LargeRock(glm::vec3(40.0f, 0.1f, -66.0f), 0.2, 90);
+	lrgRock[17] = new LargeRock(glm::vec3(40.0f, 0.1f, -60.0f), 0.2, 90);
+	lrgRock[18] = new LargeRock(glm::vec3(40.0f, 0.1f, -55.0f), 0.1, 90);
+	lrgRock[19] = new LargeRock(glm::vec3(40.0f, 0.1f, -50.0f), 0.2, 90);
+	lrgRock[20] = new LargeRock(glm::vec3(40.0f, 0.1f, -43.5f), 0.2, 90);
+	lrgRock[21] = new LargeRock(glm::vec3(31.5f, 0.1f, -40.0f), 0.4, 0);
 
 	//Large Rocks initialised
 	for (int j = 0; j < numOfrocks; j++)
@@ -240,21 +214,24 @@ void init(void) {
 	myCamera = new Camera();
 	myCamera->initialise();
 
+	myHUD = new OnscreenHUD();
+	myHUD->initialise();
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
 
-	// set up TrueType / SDL_ttf
-	if (TTF_Init()== -1)
-		cout << "TTF failed to initialise." << endl;
+	//// set up TrueType / SDL_ttf
+	//if (TTF_Init()== -1)
+	//	cout << "TTF failed to initialise." << endl;
 
-	textFont = TTF_OpenFont("MavenPro-Regular.ttf", 48);
-	if (textFont == NULL)
-		cout << "Failed to open font." << endl;
+	//textFont = TTF_OpenFont("MavenPro-Regular.ttf", 48);
+	//if (textFont == NULL)
+	//	cout << "Failed to open font." << endl;
 
-	labels[0] = textToTexture(" HUD label ");
-	labels[1] = textToTexture(" 3D label ");
+	//labels[0] = textToTexture(" HUD label ");
+	//labels[1] = textToTexture(" 3D label ");
 
 }
 
@@ -299,6 +276,8 @@ void update(void) {
 		cout << "Current animation: " << currentAnim << endl;
 	}*/
 	myCamera->update(myHobgoblin->getPos(), myHobgoblin->getRotate());
+
+	myHUD->update(myHobgoblin);
 
 	
 }
@@ -367,8 +346,11 @@ void draw(SDL_Window * window) {
 	//draw the hobgoblin
 	myHobgoblin->render(mvStack);
 
+	//draw the onscreen labels here
+	myHUD->render(mvStack, mySkybox);
+
 	
-	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(projection));
+	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(projection));
 
 	/*////////////////////////////////////////////////////////////////////
 	//This renders a 3D label
@@ -385,24 +367,24 @@ void draw(SDL_Window * window) {
 
 
 
-	////////////////////////////////////////////////////////////////////
-	//This renders a HUD label
-	////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////
+	////This renders a HUD label
+	//////////////////////////////////////////////////////////////////////
 
-	glUseProgram(mySkybox->getShaderProgram());//Use texture-only shader for text rendering
-	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
-	glBindTexture(GL_TEXTURE_2D, labels[0]);
-	mvStack.push(glm::mat4(1.0));
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-0.8f, 0.8f, 0.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.20f, 0.2f, 0.0f));
-	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(mvStack.top()));
+	//glUseProgram(mySkybox->getShaderProgram());//Use texture-only shader for text rendering
+	//glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
+	//glBindTexture(GL_TEXTURE_2D, labels[0]);
+	//mvStack.push(glm::mat4(1.0));
+	//mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-0.8f, 0.8f, 0.0f));
+	//mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.20f, 0.2f, 0.0f));
+	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
+	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(mvStack.top()));
 
-	rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
-	mvStack.pop();
+	//rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
+	//mvStack.pop();
 	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
 
-	// remember to use at least one pop operation per push...
+	//// remember to use at least one pop operation per push...
 	mvStack.pop(); // initial matrix
 	glDepthMask(GL_TRUE);
 	

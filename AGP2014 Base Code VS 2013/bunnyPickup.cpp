@@ -61,6 +61,10 @@ void BunnyPickup::render(std::stack<glm::mat4>& _Stack)
 
 void BunnyPickup::update(Hobgoblin *player)
 {
+	//This is put here as well to prevent it being updated after collection
+	if (isPickedUp)
+		return;
+
 		rotate += 0.8;
 		
 		glm::vec3 toPlayer = player->getPos() - bunnyPos;

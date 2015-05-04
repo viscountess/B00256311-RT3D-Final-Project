@@ -28,6 +28,7 @@ public:
 	void update(LargeRock **_rocks, int numberOfRocks);
 	glm::vec3 getPos() { return pos; }
 	float getRotate() { return rotate; }
+	int getCollectCounter() { return collectCounter; }
 
 	
 	//So that the collectable object can tell the player that it's in contact with it
@@ -59,6 +60,9 @@ private:
 	Collectable *currBunny;
 
 	MovingPlatform *currPlatform;
+
+	//member variable for collectable counter
+	int collectCounter;
 };
 
 

@@ -23,6 +23,7 @@ public:
 
 	glm::vec3 getRockPos(){ return rockPos; }
 	float getRockRadius(){ return rockRadius; }
+	float getRockRotation() { return rotate; }
 
 private:
 

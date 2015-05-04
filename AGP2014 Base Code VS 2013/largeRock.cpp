@@ -18,10 +18,9 @@ LargeRock::~LargeRock()
 
 void LargeRock::initialise()
 {
-	rotate = 0;
 
 	material0 = {
-		{ 1.0f, 1.0f, 0.0f, 1.0f }, // ambient
+		{ 0.0f, 0.0f, 0.0f, 1.0f }, // ambient
 		{ 0.5f, 0.5f, 0.5f, 1.0f }, // diffuse
 		{ 0.0f, 0.1f, 0.0f, 1.0f }, // specular
 		2.0f  // shininess
