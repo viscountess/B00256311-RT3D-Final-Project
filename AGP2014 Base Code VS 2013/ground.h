@@ -8,6 +8,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
 
+//forward declaration of class
+class Hobgoblin;
+
 class Ground
 {
 public:
@@ -20,6 +23,8 @@ public:
 	void initialise();
 
 	void render(std::stack<glm::mat4>& _Stack);
+
+	void update(Hobgoblin *myHobgoblin);
 
 private:
 

@@ -50,6 +50,8 @@ void Hobgoblin::reset()
 	collectCounter = 0;
 	//This is the maximum number of collectables in the game
 	maxNumOfCollectables = 8;
+	isOnSolidGround = true;
+	isDead = false;
 }
 
 void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
@@ -57,7 +59,7 @@ void Hobgoblin::render(std::stack<glm::mat4>& _Stack)
 	GLfloat scale(1.0f);
 
 	// Animate the md2 model, and update the mesh with new vertex data
-	tmpModel.Animate(currentAnim, 0.1);
+	tmpModel.Animate(currentAnim, 0.1, !hasDied());
 	rt3d::updateMesh(meshObjects[1], RT3D_VERTEX, tmpModel.getAnimVerts(), tmpModel.getVertDataSize());
 
 	// draw the hobgoblin
@@ -83,6 +85,19 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 	//If the player has won just stop updating
 	if (hasWon())
 		return;
+	//if the player has died then stop updating
+	if (hasDied())
+		return;
+
+	//if the player is not on a platform then return true that player has died
+	if (!isOnSolidGround && !currPlatform)
+	{
+		isDead = true;
+		//if player has died then play appropiate animation
+		currentAnim = 19;
+		return;
+	}
+		
 
 	glm::vec3 previousPos = pos;
 

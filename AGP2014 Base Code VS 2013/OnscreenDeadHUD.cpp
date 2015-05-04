@@ -1,4 +1,4 @@
-#include "onscreenHUD.h"
+#include "OnscreenDeadHUD.h"
 #include "skybox.h"
 #include "hobgoblin.h"
 #include "rt3d.h"
@@ -7,48 +7,49 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stack>
+#include <SDL_ttf.h>
 
 using namespace std;
 
 //constructor
-OnscreenHUD::OnscreenHUD()
+OnscreenDeadHUD::OnscreenDeadHUD()
 {
 
 }
 
 //deconstructor
-OnscreenHUD::~OnscreenHUD()
+OnscreenDeadHUD::~OnscreenDeadHUD()
 {
 
 }
 
-void OnscreenHUD::initialise()
+void OnscreenDeadHUD::initialise()
 {
-	
+	reset();
 
 	// set up TrueType / SDL_ttf
 	if (TTF_Init() == -1)
 		cout << "TTF failed to initialise." << endl;
 
-	textFont = TTF_OpenFont("Royal Inferno.ttf", 40);
+	textFont = TTF_OpenFont("MavenPro-Regular.ttf", 40);
 	if (textFont == NULL)
 		cout << "Failed to open font." << endl;
-	
-	labels[0] = textToTexture(" Bunnies:  ");
-	
-	reset();
-	
+
+	labels[0] = textToTexture(" You have died! Press 'R' to restart");
 }
 
-//Resetting all onscreen text ingame
-void OnscreenHUD::reset()
+//Resetting the win screen
+void OnscreenDeadHUD::reset()
 {
-	labels[1] = textToTexture(" 0 / 8 ");
-	currCollectCount = 0;
+	isActive = false;
 }
 
-void OnscreenHUD::render(std::stack<glm::mat4>& _Stack, Skybox *mySkybox)
+void OnscreenDeadHUD::render(std::stack<glm::mat4>& _Stack, Skybox *mySkybox)
 {
+	//Dont render if the player hasn't won yet
+	if (!isActive)
+		return;
+
 	glm::mat4 projection(1.0);
 	projection = glm::perspective(60.0f, 800.0f / 600.0f, 1.0f, 150.0f);
 	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(projection));
@@ -56,38 +57,26 @@ void OnscreenHUD::render(std::stack<glm::mat4>& _Stack, Skybox *mySkybox)
 	//This renders a HUD label
 	////////////////////////////////////////////////////////////////////
 
-	glUseProgram(mySkybox->getShaderProgram());//Use texture-only shader for text rendering
+	glUseProgram(mySkybox->getShaderProgram());//Use texture-only shader for text rendering1
 	glDisable(GL_DEPTH_TEST);//Disable depth test for HUD label
 	glBindTexture(GL_TEXTURE_2D, labels[0]);
 	_Stack.push(glm::mat4(1.0));
-	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(-0.4f, 0.8f, 0.0f));
-	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(0.40f, 0.1f, 0.0f));
+	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(-0.2f, 0.0f, 0.0f));
+	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(0.60f, 0.4f, 0.0f));
 	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
 	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(_Stack.top()));
 	rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
 	_Stack.pop();
-
-	glBindTexture(GL_TEXTURE_2D, labels[1]);
-	_Stack.push(glm::mat4(1.0));
-	_Stack.top() = glm::translate(_Stack.top(), glm::vec3(0.2f, 0.8f, 0.0f));
-	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(0.35f, 0.1f, 0.0f));
-	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(glm::mat4(1.0)));
-	rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "modelview", glm::value_ptr(_Stack.top()));
-	rt3d::drawIndexedMesh(mySkybox->getMeshObjects(), mySkybox->getMeshIndexCount(), GL_TRIANGLES);
-	_Stack.pop();
-
 }
-void OnscreenHUD::update(Hobgoblin *myHobgoblin)
+void OnscreenDeadHUD::update(Hobgoblin *myHobgoblin)
 {
-	if (myHobgoblin->getCollectCounter() != currCollectCount)
+	if (myHobgoblin->hasDied())
 	{
-		currCollectCount = myHobgoblin->getCollectCounter();
-		char tmpLabel[8];
-		_snprintf(tmpLabel, 8, " %i / 8", currCollectCount);
-		labels[1] = textToTexture(tmpLabel);
+		isActive = true;
 	}
 }
-GLuint OnscreenHUD::textToTexture(const char * str)
+
+GLuint OnscreenDeadHUD::textToTexture(const char * str)
 {
 	TTF_Font *font = textFont;
 	SDL_Color colour = { 255, 255, 255 };

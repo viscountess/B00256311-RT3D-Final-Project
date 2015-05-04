@@ -24,6 +24,7 @@
 #include "bunnyPickup.h"
 #include "onscreenHUD.h"
 #include "OnscreenWinHUD.h"
+#include "OnscreenDeadHUD.h"
 #include <SDL_ttf.h>
 
 using namespace std;
@@ -47,6 +48,7 @@ Camera *myCamera;
 
 OnscreenHUD *myHUD;
 OnscreenWinHUD *myWinScreen;
+OnscreenDeadHUD *myDeathScreen;
 
 Ground *myGround;
 LavaGround *lavapool;
@@ -222,6 +224,9 @@ void init(void) {
 	myWinScreen = new OnscreenWinHUD();
 	myWinScreen->initialise();
 
+	myDeathScreen = new OnscreenDeadHUD();
+	myDeathScreen->initialise();
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
@@ -263,6 +268,8 @@ void reset()
 	myHUD->reset();
 
 	myWinScreen->reset();
+
+	myDeathScreen->reset();
 }
 
 void update(void) {
@@ -287,7 +294,7 @@ void update(void) {
 	}
 
 	//if the Hobgoblin has won then allow the player to press R for reset
-	if (myHobgoblin->hasWon())
+	if (myHobgoblin->hasWon() || myHobgoblin->hasDied())
 	{ 
 		if (keys[SDL_SCANCODE_R])
 		{
@@ -319,6 +326,8 @@ void update(void) {
 
 	myHUD->update(myHobgoblin);
 	myWinScreen->update(myHobgoblin);
+	myDeathScreen->update(myHobgoblin);
+	myGround->update(myHobgoblin);
 
 	
 }
@@ -392,6 +401,9 @@ void draw(SDL_Window * window) {
 
 	//draw win screen here
 	myWinScreen->render(mvStack, mySkybox);
+
+	//draw death screen here
+	myDeathScreen->render(mvStack, mySkybox);
 
 	
 	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(projection));

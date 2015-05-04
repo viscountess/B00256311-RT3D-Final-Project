@@ -311,15 +311,32 @@ void md2model::FreeModel ()
 * and next frame = current frame + 1
 */
 
-void md2model::Animate (int animation, float dt)
+void md2model::Animate (int animation, float dt, bool loopAnimation)
 {
 	int start = animFrameList[animation * 2];
 	int end =  animFrameList[animation * 2 + 1];
-	if ((currentFrame < start) || (currentFrame > end))
+	if (loopAnimation)
 	{
-		currentFrame = start;
-		nextFrame = start + 1;
+		if ((currentFrame < start) || (currentFrame > end))
+		{
+			currentFrame = start;
+			nextFrame = start + 1;
+		}
 	}
+	else
+	{
+		if (currentFrame < start)
+		{
+			currentFrame = start;
+			nextFrame = start + 1;
+		}
+		if (currentFrame >= end)
+		{
+			currentFrame = end;
+			nextFrame = end;
+		}
+	}
+	
 	interp += dt;
 	if (interp >= 1.0f)
 	{

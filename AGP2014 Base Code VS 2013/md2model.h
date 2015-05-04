@@ -169,8 +169,8 @@ public:
 	~md2model();
 	GLuint ReadMD2Model(const char *filename);
 	void FreeModel();
-	void Animate(int animation, float dt);
-	void Animate(float dt) { Animate(currentAnim, dt); }
+	void Animate(int animation, float dt, bool loopAnimation);
+	void Animate(float dt) { Animate(currentAnim, dt, true); }
 	int setCurrentAnim(int n);
 	int getCurrentFrame() { return currentFrame; }
 private:

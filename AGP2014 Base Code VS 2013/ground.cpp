@@ -1,4 +1,5 @@
 #include "ground.h"
+#include "hobgoblin.h"
 
 using namespace std;
 
@@ -91,4 +92,63 @@ void Ground::render(std::stack<glm::mat4>& _Stack)
 	rt3d::setMaterial(shaderProgram, material0);
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	_Stack.pop();
+}
+
+void Ground::update(Hobgoblin *myHobgoblin)
+{
+	myHobgoblin->setOnSolidGround(false);
+
+	//Give extra buffer for collision detection
+	float extraBuffer = 0.2;
+
+	//collision detection for the player on main solid platform
+	glm::vec3 playerPos = myHobgoblin->getPos();
+	if (playerPos.x > (0 - extraBuffer) &&
+		playerPos.x < (40 + extraBuffer) &&
+		playerPos.z > (-80 - extraBuffer) &&
+		playerPos.z < (-40 + extraBuffer))
+	{
+		myHobgoblin->setOnSolidGround(true);
+		return;
+	}
+
+	//collision detection for the player on first small solid platform
+	if (playerPos.x > (10 - extraBuffer) &&
+		playerPos.x < (30 + extraBuffer) &&
+		playerPos.z > (-10 - extraBuffer) &&
+		playerPos.z < (10 + extraBuffer))
+	{
+		myHobgoblin->setOnSolidGround(true);
+		return;
+	}
+
+	//collision detection for the player on second small solid platform
+	if (playerPos.x >(-50 - extraBuffer) &&
+		playerPos.x < (-30 + extraBuffer) &&
+		playerPos.z >(-90 - extraBuffer) &&
+		playerPos.z < (-70 + extraBuffer))
+	{
+		myHobgoblin->setOnSolidGround(true);
+		return;
+	}
+
+	//collision detection for the player on third small solid platform
+	if (playerPos.x >(-60 - extraBuffer) &&
+		playerPos.x < (-40 + extraBuffer) &&
+		playerPos.z >(55 - extraBuffer) &&
+		playerPos.z < (75 + extraBuffer))
+	{
+		myHobgoblin->setOnSolidGround(true);
+		return;
+	}
+
+	//collision detection for the player on fourth small solid platform
+	if (playerPos.x >(20 - extraBuffer) &&
+		playerPos.x < (40 + extraBuffer) &&
+		playerPos.z >(60 - extraBuffer) &&
+		playerPos.z < (80 + extraBuffer))
+	{
+		myHobgoblin->setOnSolidGround(true);
+		return;
+	}
 }

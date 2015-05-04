@@ -30,8 +30,9 @@ public:
 	float getRotate() { return rotate; }
 	int getCollectCounter() { return collectCounter; }
 	bool hasWon(){ return collectCounter == maxNumOfCollectables; }
-	bool hasDied() { return false; }
+	bool hasDied() { return isDead; }
 	void reset();
+	void setOnSolidGround(bool onGround) { isOnSolidGround = onGround; }
 
 	
 	//So that the collectable object can tell the player that it's in contact with it
@@ -69,6 +70,10 @@ private:
 
 	//member variable for maximum number of collectables
 	int maxNumOfCollectables;
+
+	bool isOnSolidGround;
+
+	bool isDead;
 };
 
 

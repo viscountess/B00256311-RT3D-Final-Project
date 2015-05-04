@@ -90,6 +90,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="md2model.cpp" />
     <ClCompile Include="movingPlatform.cpp" />
+    <ClCompile Include="OnscreenDeadHUD.cpp" />
     <ClCompile Include="onscreenHUD.cpp" />
     <ClCompile Include="OnscreenWinHUD.cpp" />
     <ClCompile Include="rt3d.cpp" />
@@ -102,6 +103,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collectable.h" />
     <ClInclude Include="ground.h" />
+    <ClInclude Include="OnscreenDeadHUD.h" />
     <ClInclude Include="OnscreenWinHUD.h" />
     <ClInclude Include="hobgoblin.h" />
     <ClInclude Include="largeRock.h" />
