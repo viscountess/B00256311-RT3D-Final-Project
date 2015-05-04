@@ -3,10 +3,11 @@
 using namespace std;
 
 //constructor
-LargeRock::LargeRock(glm::vec3 _rockPos, float _rockScale)
+LargeRock::LargeRock(glm::vec3 _rockPos, float _rockScale, float _rotate)
 {
 	rockPos = _rockPos;
 	rockScale = _rockScale;
+	rotate = _rotate;
 }
 
 //deconstructor
@@ -17,6 +18,8 @@ LargeRock::~LargeRock()
 
 void LargeRock::initialise()
 {
+	rotate = 0;
+
 	material0 = {
 		{ 1.0f, 1.0f, 0.0f, 1.0f }, // ambient
 		{ 0.5f, 0.5f, 0.5f, 1.0f }, // diffuse
@@ -67,6 +70,9 @@ void LargeRock::render(std::stack<glm::mat4>& _Stack)
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	_Stack.push(_Stack.top());
 	_Stack.top() = glm::translate(_Stack.top(), rockPos);
+	_Stack.top() = glm::rotate(_Stack.top(), rotate, glm::vec3(0.0f, -1.0f, 0.0f));
+	//_Stack.top() = glm::rotate(_Stack.top(), 90.0f, glm::vec3(-1.0f, 0.0f, 0.0f));
+
 	_Stack.top() = glm::scale(_Stack.top(), glm::vec3(rockScale, rockScale, rockScale));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(_Stack.top()));
 	rt3d::setMaterial(shaderProgram, material0);

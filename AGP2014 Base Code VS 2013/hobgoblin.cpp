@@ -173,7 +173,7 @@ void Hobgoblin::update(LargeRock **_rocks, int numberOfRocks)
 			float height = pos.y;
 			pos = currRock->getRockPos() + diff;
 			pos.y = height;
-			break;
+//			break;
 		}
 	}
 }

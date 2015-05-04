@@ -61,7 +61,8 @@ BunnyPickup *gBunnies[numOfgBunnies];
 //-these will form a wall around the platforms
 //One rock for now to ensure I can load the rock correctly
 //with texture and collision working
-LargeRock *lrgRock[1];
+const int numOfrocks = 2;
+LargeRock *lrgRock[numOfrocks];
 
 GLfloat r = 0.0f;
 
@@ -206,10 +207,13 @@ void init(void) {
 		mPlatform[i]->initialise();
 	}
 
+	//Positions of large rocks
+	lrgRock[0] = new LargeRock(glm::vec3(2.0f, 0.1f, -42.0f), 0.2, 0);
+	lrgRock[1] = new LargeRock(glm::vec3(8.0f, 0.1f, -42.0f), 0.2, 0);
+
 	//Large Rocks initialised
-	for (int j = 0; j < 1; j++)
+	for (int j = 0; j < numOfrocks; j++)
 	{
-		lrgRock[j] = new LargeRock(glm::vec3(2.0f, 0.1f, -42.0f), 0.2);
 		lrgRock[j]->initialise();
 	}
 
@@ -284,7 +288,7 @@ void update(void) {
 		gBunnies[j]->update(myHobgoblin);
 	}
 
-	myHobgoblin->update(lrgRock, 1);
+	myHobgoblin->update(lrgRock, numOfrocks);
 	/*if ( keys[SDL_SCANCODE_Z] ) {
 		if (--currentAnim < 0) currentAnim = 19;
 		cout << "Current animation: " << currentAnim << endl;
@@ -348,7 +352,7 @@ void draw(SDL_Window * window) {
 	}
 
 	//drawing large rocks here
-	for (int j = 0; j < 1; j++)
+	for (int j = 0; j < numOfrocks; j++)
 	{
 		lrgRock[j]->render(mvStack);
 	}
