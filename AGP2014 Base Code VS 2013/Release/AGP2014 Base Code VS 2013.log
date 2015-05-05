@@ -1,0 +1,107 @@
+﻿Build started 05/05/2015 02:16:32.
+     1>Project "C:\Users\Callum\Downloads\B00256311-RT3D-Final-Project\AGP2014 Base Code VS 2013\AGP2014 Base Code VS 2013.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\dev\SDL2 plugins\include" /I"C:\dev\SDL2-2.0.3\include" /I"C:\dev\glew-1.11.0\include" /I"C:\dev\glm-0.9.5.4" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt bunnyPickup.cpp camera.cpp ground.cpp hobgoblin.cpp largeRock.cpp lavaground.cpp main.cpp md2model.cpp movingPlatform.cpp OnscreenDeadHUD.cpp onscreenHUD.cpp OnscreenWinHUD.cpp rt3d.cpp rt3dObjLoader.cpp skybox.cpp
+         bunnyPickup.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+     1>bunnyPickup.cpp(74): warning C4305: '+=' : truncation from 'double' to 'float'
+         GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         camera.cpp
+         ground.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+     1>ground.cpp(102): warning C4305: 'initializing' : truncation from 'double' to 'float'
+         hobgoblin.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+     1>hobgoblin.cpp(75): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>hobgoblin.cpp(128): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>hobgoblin.cpp(177): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>hobgoblin.cpp(183): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>hobgoblin.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'float'
+         GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         largeRock.cpp
+     1>largeRock.cpp(44): warning C4018: '<' : signed/unsigned mismatch
+         GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         lavaground.cpp
+         main.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+     1>main.cpp(168): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(169): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(170): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(171): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(172): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(173): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(174): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(175): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(177): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(178): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(179): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(180): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(181): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(182): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(184): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(185): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(186): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(187): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(188): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(189): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(190): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>main.cpp(191): warning C4305: 'argument' : truncation from 'double' to 'float'
+         GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         md2model.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+     1>md2model.cpp(176): warning C4101: 'v' : unreferenced local variable
+     1>md2model.cpp(176): warning C4101: 'norm' : unreferenced local variable
+     1>md2model.cpp(175): warning C4101: 's' : unreferenced local variable
+     1>md2model.cpp(175): warning C4101: 't' : unreferenced local variable
+     1>md2model.cpp(355): warning C4018: '<' : signed/unsigned mismatch
+         movingPlatform.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+     1>movingPlatform.cpp(91): warning C4305: '-=' : truncation from 'double' to 'float'
+         OnscreenDeadHUD.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+         GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         onscreenHUD.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+         GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         OnscreenWinHUD.cpp
+     1>c:\users\callum\downloads\b00256311-rt3d-final-project\agp2014 base code vs 2013\md2model.h(40): warning C4005: 'WIN32' : macro redefinition
+                 command-line arguments :  see previous definition of 'WIN32'
+         GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         rt3d.cpp
+         rt3dObjLoader.cpp
+     1>rt3dObjLoader.cpp(196): warning C4018: '<' : signed/unsigned mismatch
+     1>rt3dObjLoader.cpp(134): warning C4101: 'y' : unreferenced local variable
+     1>rt3dObjLoader.cpp(134): warning C4101: 'x' : unreferenced local variable
+     1>rt3dObjLoader.cpp(134): warning C4101: 'z' : unreferenced local variable
+         skybox.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Callum\Downloads\B00256311-RT3D-Final-Project\Release\AGP2014 Base Code VS 2013.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\dev\SDL2 plugins\lib\x86" /LIBPATH:"C:\dev\SDL2-2.0.3\lib\x86" /LIBPATH:"C:\dev\glew-1.11.0\lib\Release\Win32" bass.lib SDL2.lib SDL2main.lib SDL2_ttf.lib opengl32.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Callum\Downloads\B00256311-RT3D-Final-Project\Release\AGP2014 Base Code VS 2013.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Callum\Downloads\B00256311-RT3D-Final-Project\Release\AGP2014 Base Code VS 2013.lib" /MACHINE:X86 /SAFESEH Release\bunnyPickup.obj
+         Release\camera.obj
+         Release\ground.obj
+         Release\hobgoblin.obj
+         Release\largeRock.obj
+         Release\lavaground.obj
+         Release\main.obj
+         Release\md2model.obj
+         Release\movingPlatform.obj
+         Release\OnscreenDeadHUD.obj
+         Release\onscreenHUD.obj
+         Release\OnscreenWinHUD.obj
+         Release\rt3d.obj
+         Release\rt3dObjLoader.obj
+         Release\skybox.obj
+     1>bunnyPickup.obj : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+     1>C:\Users\Callum\Downloads\B00256311-RT3D-Final-Project\Release\AGP2014 Base Code VS 2013.exe : fatal error LNK1120: 1 unresolved externals
+     1>Done Building Project "C:\Users\Callum\Downloads\B00256311-RT3D-Final-Project\AGP2014 Base Code VS 2013\AGP2014 Base Code VS 2013.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:07.29
