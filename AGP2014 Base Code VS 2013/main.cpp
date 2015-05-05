@@ -231,18 +231,6 @@ void init(void) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-
-	//// set up TrueType / SDL_ttf
-	//if (TTF_Init()== -1)
-	//	cout << "TTF failed to initialise." << endl;
-
-	//textFont = TTF_OpenFont("MavenPro-Regular.ttf", 48);
-	//if (textFont == NULL)
-	//	cout << "Failed to open font." << endl;
-
-	//labels[0] = textToTexture(" HUD label ");
-	//labels[1] = textToTexture(" 3D label ");
-
 }
 
 //Reset everything in the game
@@ -274,15 +262,6 @@ void reset()
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	//if ( keys[SDL_SCANCODE_W] ) eye = moveForward(eye,r,0.1f);
-	//if ( keys[SDL_SCANCODE_S] ) eye = moveForward(eye,r,-0.1f);
-	//if ( keys[SDL_SCANCODE_A] ) eye = moveRight(eye,r,-0.1f);
-	//if ( keys[SDL_SCANCODE_D] ) eye = moveRight(eye,r,0.1f);
-	//if ( keys[SDL_SCANCODE_R] ) eye.y += 0.1;
-	//if ( keys[SDL_SCANCODE_F] ) eye.y -= 0.1;
-
-	//if ( keys[SDL_SCANCODE_COMMA] ) r -= 1.0f;
-	//if ( keys[SDL_SCANCODE_PERIOD] ) r += 1.0f;
 
 	if ( keys[SDL_SCANCODE_1] ) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -314,14 +293,7 @@ void update(void) {
 	}
 
 	myHobgoblin->update(lrgRock, numOfrocks);
-	/*if ( keys[SDL_SCANCODE_Z] ) {
-		if (--currentAnim < 0) currentAnim = 19;
-		cout << "Current animation: " << currentAnim << endl;
-	}
-	if ( keys[SDL_SCANCODE_X] ) {
-		if (++currentAnim >= 20) currentAnim = 0;
-		cout << "Current animation: " << currentAnim << endl;
-	}*/
+
 	myCamera->update(myHobgoblin->getPos(), myHobgoblin->getRotate(), myHobgoblin->hasWon());
 
 	myHUD->update(myHobgoblin);
@@ -404,22 +376,6 @@ void draw(SDL_Window * window) {
 
 	//draw death screen here
 	myDeathScreen->render(mvStack, mySkybox);
-
-	
-	//rt3d::setUniformMatrix4fv(mySkybox->getShaderProgram(), "projection", glm::value_ptr(projection));
-
-	/*////////////////////////////////////////////////////////////////////
-	//This renders a 3D label
-	////////////////////////////////////////////////////////////////////
-
-	glUseProgram(skyboxProgram);//Use texture-only shader for text rendering
-	glBindTexture(GL_TEXTURE_2D, labels[1]);
-	mvStack.push(mvStack.top());
-	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(-1.0f, 2.0f, -7.0f));
-	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(1.0f, 1.0f, 0.0f));
-	rt3d::setUniformMatrix4fv(skyboxProgram, "modelview", glm::value_ptr(mvStack.top()));
-	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
-	mvStack.pop();*/
 
 	glEnable(GL_DEPTH_TEST);//Re-enable depth test after HUD label 
 
