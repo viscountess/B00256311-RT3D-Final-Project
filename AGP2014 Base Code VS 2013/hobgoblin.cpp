@@ -46,6 +46,7 @@ void Hobgoblin::initialise()
 	playings using playback position as override decider */
 	//sound courtesy of http://www.freesfx.co.uk/
 	pickupSound = loadSound("bunny_pickup.mp3");
+	//sound courtesy of http://www.audiomicro.com/
 	deathSound = loadSound("death scream.wav");
 
 }
